@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Fragment MainFragment;
-    private Fragment MyCouponFragment;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -22,22 +19,27 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_main:
-                    transaction.replace(R.id.navigation_main, MainFragment);
-                    break;
+                    transaction.replace(R.id.content, MainFragment.newInstance()).commit();
+                    return true;
                 case R.id.navigation_myCoupon:
-                    transaction.replace(R.id.navigation_main, MyCouponFragment);
-                    break;
+                    transaction.replace(R.id.content, MyCouponFragment.newInstance()).commit();
+                    return true;
                 case R.id.navigation_myItem:
-                    break;
+                    transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
+                    return true;
                 case R.id.navigation_setting:
-                    break;
+                    transaction.replace(R.id.content,SettingFragment.newInstance()).commit();
+                    return true;
                 default:
                     break;
+
             }
             return false;
         }
 
     };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +48,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        MainFragment = new MainFragment();
-        MyCouponFragment = new MyCouponFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.content,MainFragment);
-        transaction.addToBackStack(null);
+        transaction.add(R.id.content,MainFragment.newInstance());
         transaction.commit();
 
 
