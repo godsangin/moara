@@ -7,17 +7,17 @@
         android:title="@string/title_Main" />
     <item
         android:id="@+id/navigation_myCoupon"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_import_contacts_black_24dp"
         android:title="@string/title_MyCoupon" />
 
     <item
         android:id="@+id/navigation_myItem"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_card_giftcard_black_24dp"
         android:title="@string/title_MyItem" />
 
     <item
         android:id="@+id/navigation_setting"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/title_Setting" />
 
 </menu>
