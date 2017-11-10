@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Moara</string>
+    <string name="title_Main">Main</string>
+    <string name="title_MyCoupon">MyCoupon</string>
+    <string name="title_MyItem">MyItem</string>
+    <string name="title_Setting">Setting</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
