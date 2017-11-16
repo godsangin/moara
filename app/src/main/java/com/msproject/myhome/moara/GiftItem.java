@@ -4,9 +4,9 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class GiftItem {
-    public String name;
     public String date;
     public String from;
+    public String name;
     public int resId;
 
     public GiftItem() {
@@ -21,7 +21,7 @@ public class GiftItem {
     }
 
     public String getName(){return name;}
-    public void setName(String year){this.name=name;}
+    public void setName(String name){this.name=name;}
 
     public int getResId(){return resId;}
     public void setResId(int resId){this.resId=resId;}
