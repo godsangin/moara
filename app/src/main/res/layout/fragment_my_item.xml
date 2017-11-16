@@ -5,9 +5,18 @@
     tools:context="com.msproject.myhome.moara.MyItemFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="myitemFragment" />
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/myItemList"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+    </LinearLayout>
 
 </FrameLayout>
