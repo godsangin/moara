@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".AddCouponActivity" />
         <activity android:name=".ShowCouponActivity"></activity>
+        <activity android:name=".GiftItemView" />
+        <activity android:name=".GiftItem"></activity>
     </application>
 
 </manifest>
