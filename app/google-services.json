@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "735843472859",
+    "firebase_url": "https://moara-aabe8.firebaseio.com",
+    "project_id": "moara-aabe8",
+    "storage_bucket": "moara-aabe8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735843472859:android:078c3a49bb861f2e",
+        "android_client_info": {
+          "package_name": "com.msproject.myhome.moara"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735843472859-9fnljev0ddohim6jehcriig0aepqlqs8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUqkJ83YsjqNf5XJRHIIGXPb94qU03FW0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
