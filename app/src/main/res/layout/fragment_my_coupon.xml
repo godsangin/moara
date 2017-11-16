@@ -5,9 +5,18 @@
     tools:context="com.msproject.myhome.moara.MyCouponFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="myCouponeFragment" />
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/couponList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+    </LinearLayout>
+
+
+
 
 </FrameLayout>
