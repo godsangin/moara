@@ -18,13 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".AlarmActivity"></activity>
+        <activity android:name=".AlarmActivity" />
         <activity android:name=".AddCouponActivity" />
-        <activity android:name=".ShowCouponActivity"></activity>
+        <activity android:name=".ShowCouponActivity" />
         <activity android:name=".GiftItemView" />
-        <activity android:name=".GiftItem"></activity>
-
+        <activity android:name=".GiftItem" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignupActivity"></activity>
     </application>
 
 </manifest>
