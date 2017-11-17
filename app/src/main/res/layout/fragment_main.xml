@@ -5,9 +5,53 @@
     tools:context="com.msproject.myhome.moara.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="mainFragmentqweqweqwewqewq" />
+        android:text="mainFragment" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Event"/>
+
+            <AdapterViewFlipper
+                android:id="@+id/event_tab"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:flipInterval="3000">
+            </AdapterViewFlipper>
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Coupon"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/coupon_img_01"
+                android:scaleType="fitXY"/>
+
+            <TextView
+                android:gravity="center"
+                android:text="Items"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <com.msproject.myhome.moara.HorizontalListView
+                android:id="@+id/item_list"
+                android:layout_width="fill_parent"
+                android:layout_height="130dp"
+                android:background="#FFFFFF"/>
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>
