@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public static String uid;
+    String user_type;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -31,22 +33,29 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            switch (item.getItemId()) {
-                case R.id.navigation_main:
-                    transaction.replace(R.id.content, MainFragment.newInstance()).commit();
-                    return true;
-                case R.id.navigation_myCoupon:
-                    transaction.replace(R.id.content, MyCouponFragment.newInstance()).commit();
-                    return true;
-                case R.id.navigation_myItem:
-                    transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
-                    return true;
-                case R.id.navigation_setting:
-                    transaction.replace(R.id.content, SettingFragment.newInstance()).commit();
-                    return true;
-                default:
-                    break;
-            }
+
+                switch (item.getItemId()) {
+                    case R.id.navigation_main:
+                        if(item.getTitle().equals("적립")){
+                            transaction.replace(R.id.content, SaveFragment.newInstance()).commit();
+                        }
+                        else{
+                            transaction.replace(R.id.content, MainFragment.newInstance()).commit();
+                        }
+                        return true;
+                    case R.id.navigation_myCoupon:
+                        transaction.replace(R.id.content, MyCouponFragment.newInstance()).commit();
+                        return true;
+                    case R.id.navigation_myItem:
+                        transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
+                        return true;
+                    case R.id.navigation_setting:
+                        transaction.replace(R.id.content, SettingFragment.newInstance()).commit();
+                        return true;
+                    default:
+                        break;
+                }
+
             return false;
         }
 
@@ -59,10 +68,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
-        String id = preferences.getString("id", null);
-        uid = preferences.getString("uid", null);
-        String user_type = preferences.getString("type", null);
+        user_type = preferences.getString("type", null); ;
 
+        FirebaseUser id = FirebaseAuth.getInstance().getCurrentUser();
+        uid = preferences.getString("uid", null);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        Log.d("user_type==", user_type);
 
         if(id == null) {
 
@@ -70,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Log.d("email==", id);
+
             if(user_type.equals("store")){
                 BottomNavigationView navigationView = (BottomNavigationView) findViewById(R.id.navigation);
                 Menu menu = navigationView.getMenu();
@@ -81,22 +93,48 @@ public class MainActivity extends AppCompatActivity {
                 MenuItem third = menu.findItem(R.id.navigation_myItem);
                 third.setTitle("상품");
                 MenuItem forth = menu.findItem(R.id.navigation_setting);
-                navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                mOnNavigationItemSelectedListener
+                        = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                        switch (item.getItemId()) {
+                            case R.id.navigation_main:
+
+                                return true;
+                            case R.id.navigation_myCoupon:
+                                transaction.replace(R.id.content, UseFragment.newInstance()).commit();
+                                return true;
+                            case R.id.navigation_myItem:
+                                transaction.replace(R.id.content, ProductFragment.newInstance()).commit();
+                                return true;
+                            case R.id.navigation_setting:
+                                transaction.replace(R.id.content, SettingStoreFragment.newInstance()).commit();
+                                return true;
+                            default:
+                                break;
+                        }
                         return false;
                     }
-                });
+                };
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.content,SaveFragment.newInstance());
+                transaction.commit();
+                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+            }
+            else{
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.content,MainFragment.newInstance());
+                transaction.commit();
+                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
             }
         }
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.content,MainFragment.newInstance());
-        transaction.commit();
 
         actionBar = this.getSupportActionBar();
         actionBar.show();
