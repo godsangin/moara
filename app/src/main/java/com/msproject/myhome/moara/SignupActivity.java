@@ -29,6 +29,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText user_password;
     EditText user_name;
     EditText user_tel;
+    EditText user_type;
     Button button;
     FirebaseAuth mAuth;
     Context mContext;
@@ -43,6 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         user_password = (EditText)findViewById(R.id.user_password);
         user_name = (EditText)findViewById(R.id.user_name);
         user_tel = (EditText)findViewById(R.id.user_tel);
+        user_type = (EditText)findViewById(R.id.user_type);
 
         mContext = this;
         mLayoutInflater = getLayoutInflater();
@@ -56,6 +58,7 @@ public class SignupActivity extends AppCompatActivity {
                     final String password = user_password.getText().toString();
                     final String name = user_name.getText().toString();
                     final String tel = user_tel.getText().toString();
+                    final String type = user_type.getText().toString();
 
                     mAuth = FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(id, password).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
@@ -74,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
                                 Map<String, String> userValues;
                                 Map<String, Object> childUpdates = new HashMap<String, Object>();
 
-                                newUser = new User(id, password, name, tel);
+                                newUser = new User(id, password, name, tel, type);
                                 userValues = newUser.toMap();
                                 childUpdates.put(uid, userValues);
                                 mDatabase.updateChildren(childUpdates);
@@ -93,7 +96,11 @@ public class SignupActivity extends AppCompatActivity {
 
                                 SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("uid", uid);
                                 editor.putString("id", id);
+                                editor.putString("name", name);
+                                editor.putString("tel", tel);
+                                editor.putString("type", type);
 //                                if (isProviderChecked) {
 //                                    editor.putBoolean("place", true);
 //                                }

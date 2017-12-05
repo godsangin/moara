@@ -16,16 +16,18 @@ public class User {
     public String password;
     public String name;
     public String tel;
+    public String type;
 
     public User() {
 
     }
 
-    public User(String id, String password, String name, String tel) {
+    public User(String id, String password, String name, String tel, String type) {
         this.id = id;
         this.password = password;
         this.name = name;
         this.tel = tel;
+        this.type = type;
     }
 
     @Exclude
@@ -35,6 +37,7 @@ public class User {
         result.put("password", password);
         result.put("name", name);
         result.put("tel", tel);
+        result.put("type", type);
 
         return result;
     }
@@ -69,5 +72,12 @@ public class User {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+    public void setType(String type){
+        this.type = type;
     }
 }

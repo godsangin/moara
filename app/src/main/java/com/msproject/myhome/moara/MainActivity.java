@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBar actionBar;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    public static String uid;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
                     return true;
                 case R.id.navigation_setting:
-                    transaction.replace(R.id.content,SettingFragment.newInstance()).commit();
+                    transaction.replace(R.id.content, SettingFragment.newInstance()).commit();
                     return true;
                 default:
                     break;
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
         String id = preferences.getString("id", null);
+        uid = preferences.getString("uid", null);
+        String user_type = preferences.getString("type", null);
 
 
         if(id == null) {
@@ -67,9 +71,27 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
             Log.d("email==", id);
+            if(user_type.equals("store")){
+                BottomNavigationView navigationView = (BottomNavigationView) findViewById(R.id.navigation);
+                Menu menu = navigationView.getMenu();
+                MenuItem first = menu.findItem(R.id.navigation_main);
+                first.setTitle("적립");
+                MenuItem second = menu.findItem(R.id.navigation_myCoupon);
+                second.setTitle("사용");
+                MenuItem third = menu.findItem(R.id.navigation_myItem);
+                third.setTitle("상품");
+                MenuItem forth = menu.findItem(R.id.navigation_setting);
+                navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        return false;
+                    }
+                });
             }
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
