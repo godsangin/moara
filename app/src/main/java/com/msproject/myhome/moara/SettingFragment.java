@@ -1,6 +1,7 @@
 package com.msproject.myhome.moara;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,10 +9,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 public class SettingFragment extends Fragment {
     ListView listView;
     SettingAdapter adapter;
+
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -44,6 +49,27 @@ public class SettingFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         listView.setAdapter(adapter);
+        AdapterView.OnItemClickListener mItemClickListner = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    default:
+                        return;
+                }
+            }
+        };
+        listView.setOnItemClickListener(mItemClickListner);
     }
 
     @Override

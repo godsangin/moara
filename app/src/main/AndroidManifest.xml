@@ -21,10 +21,10 @@
         <activity android:name=".AlarmActivity" />
         <activity android:name=".AddCouponActivity" />
         <activity android:name=".ShowCouponActivity" />
-        <activity android:name=".GiftItemView" />
-        <activity android:name=".GiftItem" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".SubmitStoreActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

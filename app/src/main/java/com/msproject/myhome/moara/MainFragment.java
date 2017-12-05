@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,12 +41,13 @@ public class MainFragment extends Fragment {
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
         return fragment;
+
+
     }
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
