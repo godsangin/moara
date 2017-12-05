@@ -38,42 +38,42 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             transaction = getSupportFragmentManager().beginTransaction();
 
-                switch (item.getItemId()) {
-                    case R.id.navigation_main:
-                        if(item.getTitle().equals("적립")){
-                            transaction.replace(R.id.content, SaveFragment.newInstance()).commit();
-                        }
-                        else{
-                            transaction.replace(R.id.content, MainFragment.newInstance()).commit();
-                        }
-                        return true;
-                    case R.id.navigation_myCoupon:
-                        if(item.getTitle().equals("사용")){
-                            transaction.replace(R.id.content, UseFragment.newInstance()).commit();
-                        }
-                        else{
-                            transaction.replace(R.id.content, MyCouponFragment.newInstance()).commit();
-                        }
-                        return true;
-                    case R.id.navigation_myItem:
-                        if(item.getTitle().equals("상품")){
-                            transaction.replace(R.id.content, ProductFragment.newInstance()).commit();
-                        }
-                        else{
-                            transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
-                        }
-                        return true;
-                    case R.id.navigation_setting:
-                        if(item.getTitle().equals("설정")){
-                            transaction.replace(R.id.content, SettingStoreFragment.newInstance()).commit();
-                        }
-                        else {
-                            transaction.replace(R.id.content, SettingFragment.newInstance()).commit();
-                        }
-                        return true;
-                    default:
-                        break;
-                }
+            switch (item.getItemId()) {
+                case R.id.navigation_main:
+                    if(item.getTitle().equals("적립")){
+                        transaction.replace(R.id.content, SaveFragment.newInstance()).commit();
+                    }
+                    else{
+                        transaction.replace(R.id.content, MainFragment.newInstance()).commit();
+                    }
+                    return true;
+                case R.id.navigation_myCoupon:
+                    if(item.getTitle().equals("쿠폰 사용")){
+                        transaction.replace(R.id.content, UseFragment.newInstance()).commit();
+                    }
+                    else{
+                        transaction.replace(R.id.content, MyCouponFragment.newInstance()).commit();
+                    }
+                    return true;
+                case R.id.navigation_myItem:
+                    if(item.getTitle().equals("상품 관리")){
+                        transaction.replace(R.id.content, ProductFragment.newInstance()).commit();
+                    }
+                    else{
+                        transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
+                    }
+                    return true;
+                case R.id.navigation_setting:
+                    if(item.getTitle().equals("매장 설정")){
+                        transaction.replace(R.id.content, SettingStoreFragment.newInstance()).commit();
+                    }
+                    else {
+                        transaction.replace(R.id.content, SettingFragment.newInstance()).commit();
+                    }
+                    return true;
+                default:
+                    break;
+            }
             return false;
         }
 
@@ -92,12 +92,12 @@ public class MainActivity extends AppCompatActivity {
         uid = preferences.getString("uid", null);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
-
         if(id == null) {
 
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+
         } else {
 
             if(user_type.equals("store")){
@@ -107,20 +107,40 @@ public class MainActivity extends AppCompatActivity {
 
                 //MenuItem second = menu.findItem(R.id.navigation_myCoupon);
                 second = menu.findItem(R.id.navigation_myCoupon);
-                second.setTitle("사용");
+                second.setTitle("쿠폰 사용");
 
                 //MenuItem third = menu.findItem(R.id.nuseravigation_myItem);
                 third = menu.findItem(R.id.navigation_myItem);
-                third.setTitle("상품");
+                third.setTitle("상품 관리");
 
                 MenuItem forth = menu.findItem(R.id.navigation_setting);
 
-                forth.setTitle("설정");
+                forth.setTitle("매장 설정");
               
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.content,SaveFragment.newInstance());
                 transaction.commit();
 
+            }
+            else{
+                Menu menu = navigation.getMenu();
+                MenuItem first = menu.findItem(R.id.navigation_main);
+                first.setTitle("홈");
+
+                //MenuItem second = menu.findItem(R.id.navigation_myCoupon);
+                second = menu.findItem(R.id.navigation_myCoupon);
+                second.setTitle("스탬프");
+
+                //MenuItem third = menu.findItem(R.id.nuseravigation_myItem);
+                third = menu.findItem(R.id.navigation_myItem);
+                third.setTitle("쿠폰");
+
+                MenuItem forth = menu.findItem(R.id.navigation_setting);
+                forth.setTitle("설정");
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.content,MainFragment.newInstance());
+                transaction.commit();
             }
         }
 
