@@ -24,13 +24,17 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public static String uid;
+    public static FragmentTransaction transaction;
+
+    public static MenuItem second;
+    public static MenuItem third;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_main:
                     transaction.replace(R.id.content, MainFragment.newInstance()).commit();
@@ -76,22 +80,30 @@ public class MainActivity extends AppCompatActivity {
                 Menu menu = navigationView.getMenu();
                 MenuItem first = menu.findItem(R.id.navigation_main);
                 first.setTitle("적립");
-                MenuItem second = menu.findItem(R.id.navigation_myCoupon);
+
+                //MenuItem second = menu.findItem(R.id.navigation_myCoupon);
+                second = menu.findItem(R.id.navigation_myCoupon);
                 second.setTitle("사용");
-                MenuItem third = menu.findItem(R.id.navigation_myItem);
+
+                //MenuItem third = menu.findItem(R.id.nuseravigation_myItem);
+                third = menu.findItem(R.id.navigation_myItem);
                 third.setTitle("상품");
+
                 MenuItem forth = menu.findItem(R.id.navigation_setting);
+                forth.setTitle("설정");
+
                 navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         return false;
                     }
                 });
+
+            navigationView.setSelectedItemId(R.id.navigation_myItem);
             }
         }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -100,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar = this.getSupportActionBar();
         actionBar.show();
-
-        //actionBar.setLogo(R.drawable.ic_lightbulb_outline_black_24dp)
     }
 
     @Override

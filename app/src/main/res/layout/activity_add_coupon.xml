@@ -5,29 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.msproject.myhome.moara.AddCouponActivity">
+    tools:context="com.msproject.myhome.moara.AddCouponActivity"
+    android:weightSum="7">
 
-    <TextView
-        android:gravity="center"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="쿠폰 더하는 부분"/>
+        android:weightSum="5">
+        <Spinner
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></Spinner>
+        
+        <EditText
+            android:hint="매장 이름을 입력해 주세요."
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        
+        <Button
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="검색"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"></ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center">
         <Button
             android:id="@+id/back"
-            android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:text="뒤로가기"/>
         <Button
             android:id="@+id/add"
-            android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="100dp"
             android:layout_height="50dp"
