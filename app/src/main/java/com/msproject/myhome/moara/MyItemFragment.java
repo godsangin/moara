@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class MyItemFragment extends Fragment {
-    ListView gift_item_list;
+    GridView gift_item_list;
     GiftItemAdapter gift_item_adapter;
 
     class GiftItemAdapter extends BaseAdapter{
@@ -95,7 +96,7 @@ public class MyItemFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_item, container, false);
 
-        gift_item_list = (ListView) view.findViewById(R.id.myItemList);
+        gift_item_list = (GridView) view.findViewById(R.id.myItemList);
         gift_item_adapter =  new GiftItemAdapter(inflater);
 
         gift_item_list.setAdapter(gift_item_adapter);
