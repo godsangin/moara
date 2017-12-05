@@ -93,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
 
-        Log.d("user_type==", user_type);
-
         if(id == null) {
 
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
