@@ -1,9 +1,12 @@
 package com.msproject.myhome.moara;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +17,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends Fragment {
     List<Integer> event_list = new ArrayList<Integer>();
+    HAdapter adapter;
+    DatabaseReference mdatabase;
     AdapterViewFlipper avf;
 
     public MainFragment() {
@@ -30,8 +41,8 @@ public class MainFragment extends Fragment {
         MainFragment fragment = new MainFragment();
         return fragment;
     }
-
     @Override
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -41,27 +52,69 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        mdatabase = FirebaseDatabase.getInstance().getReference();
 
+        TextView more_coupon = (TextView) view.findViewById(R.id.more_coupon);
+        TextView more_item = (TextView) view.findViewById(R.id.more_item);
+
+        more_coupon.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.content, MyCouponFragment.newInstance());
+                transaction.commit();
+
+                MainActivity.second.setChecked(true);
+            }
+        });
+        more_item.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.content, MyItemFragment.newInstance());
+                transaction.commit();
+
+                MainActivity.third.setChecked(true);
+            }
+        });
+
+        /* 이벤트 출력하는 부분 */
         for(int i = 0; i < 4; i++){
             event_list.add(getResources().getIdentifier("event_0"+i, "drawable", "com.msproject.myhome.moara"));
         }
+        /* */
 
+        /* 내 스탬프 출력하는 부분 */
         avf = (AdapterViewFlipper) view.findViewById(R.id.event_tab);
         avf.setAdapter(new eventAdapter(view.getContext()));
+        /* */
 
+
+        /* 디비에서 아이템 받아와서 메인 화면에 띄우는거 */
         HorizontalListView item_list = (HorizontalListView) view.findViewById(R.id.item_list);
 
-        HAdapter adapter = new HAdapter();
+        adapter = new HAdapter();
 
-        adapter.addItems(new Item("커피", (R.drawable.product_00)));
-        adapter.addItems(new Item("과자", (R.drawable.product_01)));
-        adapter.addItems(new Item("케잌", (R.drawable.product_02)));
-        adapter.addItems(new Item("커피", (R.drawable.product_00)));
-        adapter.addItems(new Item("과자", (R.drawable.product_01)));
-        adapter.addItems(new Item("케잌", (R.drawable.product_02)));
+        DatabaseReference mConditionRef_item = mdatabase.child("/users/" + MainActivity.uid + "/giftitem/");
+
+        mConditionRef_item.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    GiftItem giftItem = snapshot.getValue(GiftItem.class);
+                    adapter.addItems(new Item(giftItem.getName(), getResources().getIdentifier("product_0"+i, "drawable", "com.msproject.myhome.moara")));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         item_list.setAdapter(adapter);
-
+        /* */
         return view;
     }
 

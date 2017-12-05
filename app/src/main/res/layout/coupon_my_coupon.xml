@@ -4,14 +4,49 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="10dp">
 
-    <TextView
-        android:id="@+id/myCoupon_name"
+
+
+
+    <LinearLayout
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
-    <ImageView
-        android:background="#EEEEEE"
-        android:id="@+id/myCoupon_img"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:background="@drawable/round_background"
+        android:backgroundTint="#B7D5FF">
+        <LinearLayout
+            android:layout_marginLeft="12dp"
+            android:layout_gravity="center"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:orientation="horizontal"
+            android:background="@drawable/round_background">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/myCoupon_img"
+                android:layout_margin="15dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:id="@+id/myCoupon_name"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+            <TextView
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="보유 스탬프 수"
+                android:gravity="right|bottom"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
