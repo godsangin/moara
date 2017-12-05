@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
+                android:id="@+id/linearupper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -90,13 +91,20 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:marginTop="20dp"
+                android:layout_alignBottom="@+id/linearupper"
+                android:background="#111"></LinearLayout>
+            <LinearLayout
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="300dp" />
+                    android:layout_height="500dp"
+                    android:hint="매장 설명"/>
             </LinearLayout>
         </RelativeLayout>
 

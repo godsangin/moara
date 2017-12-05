@@ -48,13 +48,28 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     case R.id.navigation_myCoupon:
-                        transaction.replace(R.id.content, MyCouponFragment.newInstance()).commit();
+                        if(item.getTitle().equals("사용")){
+                            transaction.replace(R.id.content, UseFragment.newInstance()).commit();
+                        }
+                        else{
+                            transaction.replace(R.id.content, MyCouponFragment.newInstance()).commit();
+                        }
                         return true;
                     case R.id.navigation_myItem:
-                        transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
+                        if(item.getTitle().equals("상품")){
+                            transaction.replace(R.id.content, ProductFragment.newInstance()).commit();
+                        }
+                        else{
+                            transaction.replace(R.id.content, MyItemFragment.newInstance()).commit();
+                        }
                         return true;
                     case R.id.navigation_setting:
-                        transaction.replace(R.id.content, SettingFragment.newInstance()).commit();
+                        if(item.getTitle().equals("설정")){
+                            transaction.replace(R.id.content, SettingStoreFragment.newInstance()).commit();
+                        }
+                        else {
+                            transaction.replace(R.id.content, SettingFragment.newInstance()).commit();
+                        }
                         return true;
                     default:
                         break;
@@ -77,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         uid = preferences.getString("uid", null);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
+
         Log.d("user_type==", user_type);
 
         if(id == null) {
@@ -87,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
             if(user_type.equals("store")){
-                Menu menu = navigationView.getMenu();
+                Menu menu = navigation.getMenu();
                 MenuItem first = menu.findItem(R.id.navigation_main);
                 first.setTitle("적립");
 
@@ -110,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         actionBar = this.getSupportActionBar();
         actionBar.show();
