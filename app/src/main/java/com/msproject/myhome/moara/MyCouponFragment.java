@@ -115,6 +115,7 @@ public class MyCouponFragment extends Fragment {
 
     class CouponAdapter extends BaseAdapter {
         ArrayList<Coupon> items = new ArrayList<Coupon>();
+        int[] color = {R.drawable.round_00,R.drawable.round_01,R.drawable.round_02,R.drawable.round_03,R.drawable.round_04,R.drawable.round_05};
 
         @Override
         public int getCount() {
@@ -139,14 +140,25 @@ public class MyCouponFragment extends Fragment {
 
         @Override
         public View getView(int i, View contextView, ViewGroup viewGroup) {
-            CouponView view = new CouponView(getActivity().getApplicationContext());
-
             Coupon item = items.get(i);
 
-            view.setName(item.coupon_name);
-            view.setImg(item.getCoupon_img());
+            if(this.getCount()-1 == i){
+                CouponView_Null view = new CouponView_Null(getActivity().getApplicationContext());
 
-            return view;
+                view.setImg(item.getCoupon_img());
+                view.linearLayout.setBackgroundResource(R.drawable.round_06);
+
+                return view;
+            }
+            else{
+                CouponView view = new CouponView(getActivity().getApplicationContext());
+
+                view.setName(item.coupon_name);
+                view.setImg(item.getCoupon_img());
+                view.linearLayout.setBackgroundResource(color[i%6]);
+
+                return view;
+            }
         }
     }
 }

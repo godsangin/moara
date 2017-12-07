@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.msproject.myhome.moara.SaveFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -90,9 +89,6 @@
                 android:textColor="#FFFFFF"
                 android:text="확인"/>
         </LinearLayout>
-
-
-
     </LinearLayout>
 
 </FrameLayout>

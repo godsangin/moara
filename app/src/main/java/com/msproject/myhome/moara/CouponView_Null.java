@@ -1,21 +1,18 @@
 package com.msproject.myhome.moara;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/**
- * Created by user on 2017-11-16.
- */
-
-public class CouponView extends LinearLayout {
-    TextView myCoupon_name;
+public class CouponView_Null extends LinearLayout {
     ImageView myCoupon_img;
     LinearLayout linearLayout;
 
-    public CouponView(Context context){
+    public CouponView_Null(Context context){
         super(context);
 
         init(context);
@@ -23,16 +20,12 @@ public class CouponView extends LinearLayout {
 
     public void init(Context context){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.coupon_my_coupon,this,true);
+        inflater.inflate(R.layout.null_coupon_view,this,true);
 
-        myCoupon_img = (ImageView) findViewById(R.id.myCoupon_img);
-        myCoupon_name = (TextView) findViewById(R.id.myCoupon_name);
-        linearLayout = (LinearLayout) findViewById(R.id.CouponColor);
+        myCoupon_img = (ImageView) findViewById(R.id.NullCoupon_img);
+        linearLayout = (LinearLayout) findViewById(R.id.NullCouponColor);
     }
 
-    public void setName(String name){
-        this.myCoupon_name.setText(name);
-    }
     public void setImg(int img){
         this.myCoupon_img.setImageResource(img);
     }

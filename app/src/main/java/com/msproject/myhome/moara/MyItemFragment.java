@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,7 +38,7 @@ public class MyItemFragment extends Fragment {
     class GiftItemAdapter extends BaseAdapter{
         ArrayList<GiftItem> items;
         LayoutInflater layoutInflater;
-
+        int[] color = {R.drawable.round_top_00,R.drawable.round_top_01,R.drawable.round_top_02,R.drawable.round_top_03,R.drawable.round_top_04,R.drawable.round_top_05};
 
         public GiftItemAdapter(LayoutInflater layoutInflater) {
             this.items = new ArrayList<>();
@@ -65,11 +67,12 @@ public class MyItemFragment extends Fragment {
             TextView textView2 =(TextView)view.findViewById(R.id.productDate);
             TextView textView3 =(TextView)view.findViewById(R.id.from);
             ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+            LinearLayout background = (LinearLayout) view.findViewById(R.id.GiftItemColor);
 
             textView.setText(items.get(position).getName());
             textView2.setText(items.get(position).getDate());
             textView3.setText(items.get(position).getFrom());
-
+            background.setBackgroundResource(color[position%6]);
 
             return view;
         }
@@ -131,6 +134,7 @@ public class MyItemFragment extends Fragment {
         mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     GiftItem item = snapshot.getValue(GiftItem.class);
                     gift_item_adapter.items.add(item);
