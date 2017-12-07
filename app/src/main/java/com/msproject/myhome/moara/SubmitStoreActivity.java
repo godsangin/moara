@@ -1,8 +1,12 @@
 package com.msproject.myhome.moara;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,7 +35,7 @@ public class SubmitStoreActivity extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
-    DatabaseReference mDatabase;
+    DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,27 +57,62 @@ public class SubmitStoreActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//이미지 업로드 // storage
-                StorageReference logoRef = storageReference.child("store/" + mAuth.getCurrentUser().getUid() + "/logo.jpg");
-                imageView.setDrawingCacheEnabled(true);
-                imageView.buildDrawingCache();
-                Bitmap bitmap = imageView.getDrawingCache();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
+                if(store_name.getText().toString().equals("") || where.getText().toString().equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());     // 여기서 this는 Activity의 this
 
-                UploadTask uploadTask = logoRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    }
-                });
+// 여기서 부터는 알림창의 속성 설정
+                    builder.setTitle("등록 오류")        // 제목 설정
+                            .setMessage("매장명과 장소를 입력해주세요.")        // 메세지 설정
+                            .setCancelable(false)        // 뒤로 버튼 클릭시 취소 가능 설정
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                                // 취소 버튼 클릭시 설정
+                                public void onClick(DialogInterface dialog, int whichButton){
+                                    dialog.cancel();
+                                }
+                            })
+                            .setNegativeButton("확인", new DialogInterface.OnClickListener(){
+                                // 취소 버튼 클릭시 설정
+                                public void onClick(DialogInterface dialog, int whichButton){
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog dialog = builder.create();    // 알림창 객체 생성
+                    dialog.show();    // 알림창 띄우기
+
+                }
+                else{
+                    SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
+                    String uid = preferences.getString("uid", null); ;
+                    Store store = new Store(store_name.getText().toString(), where.getText().toString(), comment.getText().toString());
+                    DatabaseReference mConditionRef = mdatabase.child("/stores/" + uid);
+                    mConditionRef.child("name").setValue(store_name.getText().toString());
+                    mConditionRef.child("local").setValue(where.getText().toString());
+                    mConditionRef.child("comment").setValue(comment.getText().toString());
+
+                    StorageReference logoRef = storageReference.child(store_name.getText().toString() + "/" + mAuth.getCurrentUser().getUid() + "/logo.jpg");
+                    imageView.setDrawingCacheEnabled(true);
+                    imageView.buildDrawingCache();
+                    Bitmap bitmap = imageView.getDrawingCache();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+
+                    UploadTask uploadTask = logoRef.putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        }
+                    });
+                }
+
             }
         });
     }
