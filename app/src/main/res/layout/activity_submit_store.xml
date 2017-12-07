@@ -99,7 +99,7 @@
                             android:textSize="20dp"
                             android:layout_width="80dp"
                             android:layout_height="40dp"
-                            android:text="위치: "/>
+                            android:text="위    치 : "/>
                         <EditText
                             android:id="@+id/where"
                             android:layout_width="match_parent"
