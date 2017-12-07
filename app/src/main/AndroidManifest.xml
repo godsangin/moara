@@ -26,7 +26,8 @@
         <activity
             android:name=".SubmitStoreActivity"
             android:theme="@style/NoTitle01" />
-        <activity android:name=".CouponView_Null"></activity>
+        <activity android:name=".CouponView_Null" />
+        <activity android:name=".ModifyItem"></activity>
     </application>
 
 </manifest>
