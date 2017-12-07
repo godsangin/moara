@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,11 +46,14 @@ public class ProductFragment extends Fragment {
     ImageView imageView;
     EditText productName;
     EditText cost;
+    EditText comment;
     Button submit;
     Button cencel;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
+    DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+    LayoutInflater mLayoutInflater;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -74,34 +78,74 @@ public class ProductFragment extends Fragment {
 
         imageView = (ImageView) view.findViewById(R.id.imageView);
         productName = (EditText)view.findViewById(R.id.productName);
+        comment = (EditText)view.findViewById(R.id.comment);
         cost = (EditText)view.findViewById(R.id.cost);
         submit = (Button)view.findViewById(R.id.submit);
         cencel = (Button)view.findViewById(R.id.cencel);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                StorageReference logoRef = storageReference.child(mAuth.getCurrentUser().getUid() + "/logo.jpg");
-                imageView.setDrawingCacheEnabled(true);
-                imageView.buildDrawingCache();
-                Bitmap bitmap = imageView.getDrawingCache();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
+            public void onClick(View v) {//이미지 업로드 // storage
+                if(productName.getText().toString().equals("") || cost.getText().toString().equals("")){
+                    final CustomDialog customDialog = new CustomDialog();
+                    mLayoutInflater = getActivity().getLayoutInflater();
+                    customDialog.getInstance(getActivity(), mLayoutInflater, R.layout.submit_dialog);
+                    customDialog.show("상품명과 비용을 입력해주세요.", "확인");
+                    customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            customDialog.dismiss();
+                        }
+                    });
 
-                UploadTask uploadTask = logoRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    }
-                });
+                }
+                else{
+                    SharedPreferences preferences = getActivity().getSharedPreferences("Account", MODE_PRIVATE);
+                    String uid = preferences.getString("uid", null); ;
+                    Store store = new Store(productName.getText().toString(), cost.getText().toString(), comment.getText().toString());
+                    DatabaseReference mConditionRef = mdatabase.child("/stores/" + uid + "/" + productName.getText().toString());
+                    mConditionRef.child("name").setValue(productName.getText().toString());
+                    mConditionRef.child("price").setValue(cost.getText().toString());
+                    mConditionRef.child("comment").setValue(comment.getText().toString());
+
+                    StorageReference logoRef = storageReference.child(mAuth.getCurrentUser().getUid() + "/product/" + productName.getText().toString() + ".jpg");
+                    imageView.setDrawingCacheEnabled(true);
+                    imageView.buildDrawingCache();
+                    Bitmap bitmap = imageView.getDrawingCache();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+
+                    UploadTask uploadTask = logoRef.putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            final CustomDialog customDialog = new CustomDialog();
+                            mLayoutInflater = getActivity().getLayoutInflater();
+                            customDialog.getInstance(getActivity(), mLayoutInflater, R.layout.submit_dialog);
+                            customDialog.show("등록이 완료되었습니다.", "확인");
+                            customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    transaction.add(R.id.content,SaveFragment.newInstance());
+                                    transaction.commit();
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                        }
+                    });
+                }
+
             }
         });
         return view;

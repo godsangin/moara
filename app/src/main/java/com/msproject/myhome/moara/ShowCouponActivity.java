@@ -28,10 +28,10 @@ public class ShowCouponActivity extends AppCompatActivity {
 
         adapter = new ProductAdapter();
 
-        adapter.addItems(new Product("커피", 5, R.drawable.product_00));
-        adapter.addItems(new Product("빵", 3, R.drawable.product_01));
-        adapter.addItems(new Product("케잌", 5, R.drawable.product_02));
-        adapter.addItems(new Product("토스트", 5, R.drawable.product_03));
+        adapter.addItems(new Product("커피", 5, R.drawable.product_00, null));
+        adapter.addItems(new Product("빵", 3, R.drawable.product_01, null));
+        adapter.addItems(new Product("케잌", 5, R.drawable.product_02, null));
+        adapter.addItems(new Product("토스트", 5, R.drawable.product_03, null));
 
         listView.setAdapter(adapter);
 
@@ -51,13 +51,13 @@ public class ShowCouponActivity extends AppCompatActivity {
         builder.setMessage("구매하시겠습니까? \n사용 쿠폰 : " + selectedProduct.getPrice() +" 개");
         builder.setIcon(selectedProduct.getImage());
 
-        builder.setPositiveButton("예",new DialogInterface.OnClickListener(){
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialogI, int whichButton){
                 Toast.makeText(getApplicationContext(), "구매 완료", Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNegativeButton("아니오",new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialogI, int whichButton){
                 Toast.makeText(getApplicationContext(), "구매 실패", Toast.LENGTH_SHORT).show();
             }
