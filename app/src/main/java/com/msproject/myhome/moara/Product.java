@@ -11,7 +11,18 @@ public class Product {
     String price;
     int image;
 
-    public Product(String productName, int productPrice, int image){
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    String comment;
+
+    public Product(String productName, int productPrice, int image, String comment){
+        this.comment = comment;
         this.name = productName;
         this.price = String.valueOf(productPrice);
         this.image = image;

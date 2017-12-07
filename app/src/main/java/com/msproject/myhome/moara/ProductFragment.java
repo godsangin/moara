@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class ProductFragment extends Fragment {
@@ -22,7 +21,6 @@ public class ProductFragment extends Fragment {
     int RESULT_CODE_ADD = 100;
 
     int REQUEST_CODE_MODIFY = 101;
-
     ListView productView;
     StoreProductAdapter adapter;
     Button addButton;
@@ -31,6 +29,7 @@ public class ProductFragment extends Fragment {
 
     LinearLayout noProduct;
 
+    private int SELECT_PICTURE =1;
     public ProductFragment() {
         // Required empty public constructor
     }
@@ -109,14 +108,24 @@ public class ProductFragment extends Fragment {
 
     }
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
+    public void onAttach(Context context) { super.onAttach(context);  }
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == SELECT_PICTURE) {
+                Bitmap bm = null;
+                try {
+                    bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                bm=rotate(bm,270);
+                imageView.setImageBitmap(bm);
+                Uri selectedImageUri = data.getData();
+                getPath(selectedImageUri);
+            }
     }
 
     class StoreProduct{

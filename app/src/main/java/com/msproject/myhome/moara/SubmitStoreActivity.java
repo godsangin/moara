@@ -2,6 +2,7 @@ package com.msproject.myhome.moara;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +38,7 @@ public class SubmitStoreActivity extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
     DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+    LayoutInflater mLayoutInflater;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,27 +61,16 @@ public class SubmitStoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {//이미지 업로드 // storage
                 if(store_name.getText().toString().equals("") || where.getText().toString().equals("")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());     // 여기서 this는 Activity의 this
-
-// 여기서 부터는 알림창의 속성 설정
-                    builder.setTitle("등록 오류")        // 제목 설정
-                            .setMessage("매장명과 장소를 입력해주세요.")        // 메세지 설정
-                            .setCancelable(false)        // 뒤로 버튼 클릭시 취소 가능 설정
-                            .setPositiveButton("확인", new DialogInterface.OnClickListener(){
-                                // 취소 버튼 클릭시 설정
-                                public void onClick(DialogInterface dialog, int whichButton){
-                                    dialog.cancel();
-                                }
-                            })
-                            .setNegativeButton("확인", new DialogInterface.OnClickListener(){
-                                // 취소 버튼 클릭시 설정
-                                public void onClick(DialogInterface dialog, int whichButton){
-                                    dialog.cancel();
-                                }
-                            });
-
-                    AlertDialog dialog = builder.create();    // 알림창 객체 생성
-                    dialog.show();    // 알림창 띄우기
+                    CustomDialog customDialog = new CustomDialog();
+                    mLayoutInflater = getLayoutInflater();
+                    customDialog.getInstance(SubmitStoreActivity.this, mLayoutInflater, R.layout.submit_dialog);
+                    customDialog.show("매장명과 위치를 입력해주세요.", "확인");
+                    customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
 
                 }
                 else{
@@ -90,7 +82,7 @@ public class SubmitStoreActivity extends AppCompatActivity {
                     mConditionRef.child("local").setValue(where.getText().toString());
                     mConditionRef.child("comment").setValue(comment.getText().toString());
 
-                    StorageReference logoRef = storageReference.child(store_name.getText().toString() + "/" + mAuth.getCurrentUser().getUid() + "/logo.jpg");
+                    StorageReference logoRef = storageReference.child(mAuth.getCurrentUser().getUid() + "/store/logo.jpg");
                     imageView.setDrawingCacheEnabled(true);
                     imageView.buildDrawingCache();
                     Bitmap bitmap = imageView.getDrawingCache();
@@ -109,6 +101,17 @@ public class SubmitStoreActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                             Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            CustomDialog customDialog = new CustomDialog();
+                            mLayoutInflater = getLayoutInflater();
+                            customDialog.getInstance(SubmitStoreActivity.this, mLayoutInflater, R.layout.submit_dialog);
+                            customDialog.show("등록이 완료되었습니다.", "확인");
+                            customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    finish();
+                                }
+                            });
+
                         }
                     });
                 }
