@@ -6,15 +6,25 @@ package com.msproject.myhome.moara;
 
 public class Coupon {
     String coupon_name;
-    int coupon_img;
+    String imageSrc;
+    int num;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
 
     public Coupon(){
 
     }
 
-    public Coupon(String name, int img){
+    public Coupon(String name, int num, String img){
         this.coupon_name = name;
-        this.coupon_img = img;
+        this.imageSrc = img;
+        this.num = num;
     }
 
     public String getCoupon_name(){
@@ -24,12 +34,11 @@ public class Coupon {
         this.coupon_name = name;
     }
 
-    public int getCoupon_img(){
-        return this.coupon_img;
-    }
-    public void setCoupon_img(int img){
-        this.coupon_img = img;
+    public String getImageSrc() {
+        return imageSrc;
     }
 
-
+    public void setImageSrd(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
 }

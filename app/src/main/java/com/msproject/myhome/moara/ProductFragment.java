@@ -100,7 +100,7 @@ public class ProductFragment extends Fragment {
                     noProduct.setVisibility(View.INVISIBLE);
 
                     productView.setAdapter(adapter);
-                    Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 완료 " , Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -129,7 +129,9 @@ public class ProductFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE_ADD){
             if(resultCode == RESULT_CODE_ADD){
+                Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 완료 " , Toast.LENGTH_SHORT).show();
                 getActivity().recreate();
+
             }
             else{
                 Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 실패 " , Toast.LENGTH_SHORT).show();

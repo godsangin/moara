@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -48,7 +50,8 @@ public class AddCouponActivity extends AppCompatActivity {
     StorageReference storageRef = storage.getReference();
 
     int REQUEST_CODE_ADD = 100;
-    int REQUEST_CODE_FAIL = 101;
+    int RESULT_CODE_ADD = 101;
+    int REQUEST_CODE_FAIL = 102;
     class StoreItemAdapter extends BaseAdapter {
         ArrayList<Store> items;
 
@@ -149,7 +152,6 @@ public class AddCouponActivity extends AppCompatActivity {
 //                                Store item = snapshot.getValue(Store.class);
                                 String uid = snapshot.getKey().toString();
                                 Log.d("uid==", uid);
-                                StorageReference islandRef = storageRef.child(uid + "/store/logo.jpg");
 
                                 Store item = new Store(snapshot.child("name").getValue().toString(), snapshot.child("local").getValue().toString(), snapshot.child("comment").getValue().toString());
                                 item.setImageView(uid + "/store/logo.jpg");
@@ -175,10 +177,19 @@ public class AddCouponActivity extends AppCompatActivity {
                 Store store = (Store)store_item_adapter.getItem(position);
                 Intent intent = new Intent(AddCouponActivity.this, StoreDetailActivity.class);
                 intent.putExtra("storeUid", store.getStoreUid());
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_ADD);
             }
         });
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE_ADD){
+            if(resultCode == RESULT_CODE_ADD){
+                Intent intent = new Intent();
+                setResult(RESULT_CODE_ADD, intent);
+                finish();
+            }
+        }
+    }
 }
