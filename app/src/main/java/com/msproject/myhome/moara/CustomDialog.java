@@ -24,7 +24,7 @@ public class CustomDialog extends AppCompatActivity{
     public AlertDialog getInstance(Context context, LayoutInflater inflater, int layout) {
         dialogView = inflater.inflate(layout, null);
 
-        builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.Dialog));
+        builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
         dialog = builder.create();
 

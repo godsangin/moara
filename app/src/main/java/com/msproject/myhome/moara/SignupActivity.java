@@ -107,7 +107,7 @@ public class SignupActivity extends AppCompatActivity {
                                 editor.commit();
 
 
-                                CustomDialog customDialog = new CustomDialog();
+                                final CustomDialog customDialog = new CustomDialog();
                                 customDialog.getInstance(mContext, mLayoutInflater, R.layout.submit_dialog);
                                 customDialog.show("회원가입이 완료되었습니다.", "확인");
                                 customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
