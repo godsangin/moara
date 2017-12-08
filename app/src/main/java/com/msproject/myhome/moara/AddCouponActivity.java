@@ -115,7 +115,6 @@ public class AddCouponActivity extends AppCompatActivity {
 
         store_item_adapter.notifyDataSetChanged();
 
-
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
