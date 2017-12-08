@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -76,6 +83,28 @@ public class MyCouponFragment extends Fragment {
                 addCoupon();
             }
         });
+
+        DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mConditionRef = mdatabase.child("users/" + MainActivity.uid + "/stamps/");
+
+        mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d("snapshot==", snapshot.getValue().toString());
+                    adapter.addItems(new Coupon(snapshot.child("name").getValue().toString(), Integer.parseInt(snapshot.child("num").getValue().toString()), snapshot.child("storeUid").getValue().toString()));
+//                    Coupon stamp = snapshot.getValue(Coupon.class);
+//                    adapter.addItems(stamp);
+                    couponView.setAdapter(adapter);
+                    noCoupon.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void addCoupon(){
@@ -89,19 +118,6 @@ public class MyCouponFragment extends Fragment {
         startActivity(intent);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == REQUEST_CODE_ADD){
-            adapter.addItems(new Coupon(String.valueOf(adapter.getCount()), (R.drawable.coupon_add)));
-            noCoupon.setVisibility(View.INVISIBLE);
-
-            couponView.setAdapter(adapter);
-            Toast.makeText(getActivity().getApplicationContext(), " 쿠폰 추가 완료 " , Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getActivity().getApplicationContext(), " 쿠폰 추가 실패 " , Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
     @Override
@@ -154,10 +170,16 @@ public class MyCouponFragment extends Fragment {
             CouponView view = new CouponView(getActivity().getApplicationContext());
 
             view.setName(item.coupon_name);
-            view.setImg(item.getCoupon_img());
+            view.setImg(item.getImageSrc());
+
             view.linearLayout.setBackgroundResource(color[i%6]);
 
             return view;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
     }
 }

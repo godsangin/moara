@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     public static String uid;
     String user_type;
+    final int REQUEST_CODE_ADD_COUPON = 100;
+    final int RESULT_CODE_ADD_COUPON = 101;
 
     public static FragmentTransaction transaction;
 
@@ -168,10 +171,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==1){
             String code = data.getStringExtra("code");
             Toast.makeText(MainActivity.this,code,Toast.LENGTH_LONG).show();
         }
+        else if(resultCode == RESULT_CODE_ADD_COUPON){
+            Toast.makeText(getApplicationContext(), "쿠폰 등록 성공", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "쿠폰 등록 실패", Toast.LENGTH_SHORT).show();
+        }
     }
+
 }
