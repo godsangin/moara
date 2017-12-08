@@ -1,65 +1,33 @@
 package com.msproject.myhome.moara;
 
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import android.widget.Toast;
 import java.util.ArrayList;
 
-import static android.content.Context.MODE_PRIVATE;
-
-
 public class ProductFragment extends Fragment {
-    ImageView imageView;
-    EditText productName;
-    EditText cost;
-    EditText comment;
-    Button submit;
-    Button cencel;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageReference = storage.getReference();
-    DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
-    LayoutInflater mLayoutInflater;
+    int REQUEST_CODE_ADD = 100;
+    int RESULT_CODE_ADD = 100;
+
+    int REQUEST_CODE_MODIFY = 101;
+    ListView productView;
+    StoreProductAdapter adapter;
+    Button addButton;
+
+    int index;
+
+    LinearLayout noProduct;
 
     private int SELECT_PICTURE =1;
     public ProductFragment() {
@@ -83,26 +51,17 @@ public class ProductFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
-        imageView = (ImageView) view.findViewById(R.id.imageView);
-        productName = (EditText)view.findViewById(R.id.productName);
-        comment = (EditText)view.findViewById(R.id.comment);
-        cost = (EditText)view.findViewById(R.id.cost);
-        submit = (Button)view.findViewById(R.id.submit);
-        cencel = (Button)view.findViewById(R.id.cencel);
+        productView = (ListView) view.findViewById(R.id.ProductStoreList);
+        addButton = (Button) view.findViewById(R.id.addProduct);
+        noProduct = (LinearLayout) view.findViewById(R.id.NoProduct);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
-            }
-        });
+        noProduct.setVisibility(View.VISIBLE);
 
+        adapter= new StoreProductAdapter(inflater);
 
+        productView.setAdapter(adapter);
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        productView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onClick(View v) {//이미지 업로드 // storage
                 if(productName.getText().toString().equals("") || cost.getText().toString().equals("")){
@@ -164,12 +123,50 @@ public class ProductFragment extends Fragment {
                         }
                     });
                 }
+         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                index = i;
+            }
+        });
 
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCoupon();
             }
         });
         return view;
     }
 
+    public void addCoupon(){
+        Intent intent = new Intent(getActivity().getApplicationContext(), ModifyItem.class);
+
+        startActivityForResult(intent, REQUEST_CODE_ADD);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE_ADD){
+            if(resultCode == RESULT_CODE_ADD){
+                adapter.addItems(new StoreProduct("상품 이름", "상품 코스트","상품 유효기간","상품 정보"));
+                noProduct.setVisibility(View.INVISIBLE);
+
+                productView.setAdapter(adapter);
+                Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 완료 " , Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 실패 " , Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if(requestCode == REQUEST_CODE_MODIFY){
+            if(resultCode == RESULT_CODE_ADD){
+                Toast.makeText(getActivity().getApplicationContext(), " 상품 수정 완료 " , Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getActivity().getApplicationContext(), " 상품 수정 실패 " , Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
     @Override
     public void onAttach(Context context) { super.onAttach(context);  }
     @Override
@@ -191,44 +188,87 @@ public class ProductFragment extends Fragment {
             }
     }
 
-    /**
-     * 사진의 URI 경로를 받는 메소드
-     */
-    public String getPath(Uri uri) {
-        // uri가 null일경우 null반환
-        if( uri == null ) {
-            return null;
-        }
-        // 미디어스토어에서 유저가 선택한 사진의 URI를 받아온다.
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
-        if( cursor != null ){
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        }
-        // URI경로를 반환한다.
-        return uri.getPath();
-    }
-    public Bitmap rotate(Bitmap bitmap, int degrees){
-        Bitmap retBitmap = bitmap;
+    class StoreProduct{
+        String name;
+        String cost;
+        String validity;
+        String info;
+        int image;
 
-        if(degrees != 0 && bitmap != null){
-            Matrix m = new Matrix();
-            m.setRotate(degrees, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
-            try {
-                Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0,
-                        bitmap.getWidth(), bitmap.getHeight(), m, true);
-                if(bitmap != converted) {
-                    retBitmap = converted;
-                    bitmap.recycle();
-                    bitmap = null;
-                }
-            }
-            catch(OutOfMemoryError ex) {
-                // 메모리가 부족하여 회전을 시키지 못할 경우 그냥 원본을 반환합니다.
-            }
+        public StoreProduct(String productName, String productCost, String productValidity, String productInfo){
+            this.name = productName;
+            this.cost = productCost;
+            this.validity = productValidity;
+            this.info = productInfo;
+            //this.image = image;
         }
-        return retBitmap;
+        public String getName(){return this.name;}
+        public void setName(String name){ this.name = name; }
+
+        public String getCost(){return this.cost;}
+        public void setCost(String cost){this.cost = cost;}
+
+        public String getValidity(){return this.validity;}
+        public void setValidity(String validity){this.validity = validity;}
+
+        public String getInfo(){return this.info;}
+        public void setInfo(String info){this.info = info;}
+
+        public int getImage(){return this.image;}
+        public void setImage(int image){this.image = image;}
     }
+
+    class StoreProductAdapter extends BaseAdapter {
+        ArrayList<StoreProduct> items;
+        LayoutInflater layoutInflater;
+
+        public StoreProductAdapter(LayoutInflater layoutInflater) {
+            this.items = new ArrayList<>();
+            this.layoutInflater = layoutInflater;
+        }
+
+        @Override
+        public int getCount() {
+            return items.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return items.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public void addItems(StoreProduct item){items.add(item);}
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = layoutInflater.inflate(R.layout.store_item, null, false);
+            TextView name = (TextView) view.findViewById(R.id.store_product_name);
+            TextView cost = (TextView) view.findViewById(R.id.store_product_cost);
+            TextView validity = (TextView) view.findViewById(R.id.store_product_validity);
+            TextView info = (TextView) view.findViewById(R.id.store_product_info);
+
+            TextView modify = (TextView) view.findViewById(R.id.store_product_modify);
+
+            name.setText(items.get(position).getName());
+            cost.setText(items.get(position).getCost());
+            validity.setText(items.get(position).getValidity());
+            info.setText(items.get(position).getInfo());
+
+            modify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ModifyItem.class);
+
+                    startActivityForResult(intent, REQUEST_CODE_MODIFY);
+                }
+            });
+            return view;
+        }
+    }
+
 }

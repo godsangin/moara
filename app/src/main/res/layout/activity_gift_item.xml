@@ -8,21 +8,22 @@
     <LinearLayout
         android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="240dp"
         android:orientation="vertical">
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/GiftItemColor"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@drawable/top_round_background"
-            android:backgroundTint="#B7D5FF">
+            android:layout_height="140dp"
+
+            android:gravity="center">
             <ImageView
-                android:layout_gravity="center"
+                android:layout_margin="10dp"
                 android:id="@+id/imageView"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 />
-        </RelativeLayout>
+        </LinearLayout>
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"

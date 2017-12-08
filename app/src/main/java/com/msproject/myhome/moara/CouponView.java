@@ -13,6 +13,7 @@ import android.widget.TextView;
 public class CouponView extends LinearLayout {
     TextView myCoupon_name;
     ImageView myCoupon_img;
+    LinearLayout linearLayout;
 
     public CouponView(Context context){
         super(context);
@@ -26,6 +27,7 @@ public class CouponView extends LinearLayout {
 
         myCoupon_img = (ImageView) findViewById(R.id.myCoupon_img);
         myCoupon_name = (TextView) findViewById(R.id.myCoupon_name);
+        linearLayout = (LinearLayout) findViewById(R.id.CouponColor);
     }
 
     public void setName(String name){
@@ -34,5 +36,5 @@ public class CouponView extends LinearLayout {
     public void setImg(int img){
         this.myCoupon_img.setImageResource(img);
     }
-
+    public void setBackground(int resId) {this.linearLayout.setBackgroundResource(resId);}
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,6 +24,9 @@ public class MyCouponFragment extends Fragment {
 
     ListView couponView;
     CouponAdapter adapter;
+    Button addButton;
+
+    LinearLayout noCoupon;
 
     int index;
 
@@ -49,28 +53,34 @@ public class MyCouponFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         couponView = (ListView) view.findViewById(R.id.couponList);
+        addButton = (Button) view.findViewById(R.id.AddCoupon);
+        noCoupon = (LinearLayout) view.findViewById(R.id.NoCoupon);
+
+        noCoupon.setVisibility(View.VISIBLE);
 
         adapter= new CouponAdapter();
 
-        adapter.addItems(new Coupon(msg_coupon_add, (R.drawable.coupon_add)));
         couponView.setAdapter(adapter);
 
         couponView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(adapter.getCount()-1 == i){
-                    addCoupon();
-                }
-                else{
-                    index = i;
-                    showCoupon();
-                }
+                index = i;
+                showCoupon();
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCoupon();
             }
         });
     }
 
     public void addCoupon(){
         Intent intent = new Intent(getActivity().getApplicationContext(), AddCouponActivity.class);
+
         startActivityForResult(intent, REQUEST_CODE_ADD);
     }
 
@@ -82,9 +92,8 @@ public class MyCouponFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == REQUEST_CODE_ADD){
-            adapter.delete(adapter.getCount()-1);
             adapter.addItems(new Coupon(String.valueOf(adapter.getCount()), (R.drawable.coupon_add)));
-            adapter.addItems(new Coupon(msg_coupon_add, (R.drawable.coupon_add)));
+            noCoupon.setVisibility(View.INVISIBLE);
 
             couponView.setAdapter(adapter);
             Toast.makeText(getActivity().getApplicationContext(), " 쿠폰 추가 완료 " , Toast.LENGTH_SHORT).show();
@@ -115,6 +124,7 @@ public class MyCouponFragment extends Fragment {
 
     class CouponAdapter extends BaseAdapter {
         ArrayList<Coupon> items = new ArrayList<Coupon>();
+        int[] color = {R.drawable.round_00,R.drawable.round_01,R.drawable.round_02,R.drawable.round_03,R.drawable.round_04,R.drawable.round_05};
 
         @Override
         public int getCount() {
@@ -139,12 +149,13 @@ public class MyCouponFragment extends Fragment {
 
         @Override
         public View getView(int i, View contextView, ViewGroup viewGroup) {
-            CouponView view = new CouponView(getActivity().getApplicationContext());
-
             Coupon item = items.get(i);
+
+            CouponView view = new CouponView(getActivity().getApplicationContext());
 
             view.setName(item.coupon_name);
             view.setImg(item.getCoupon_img());
+            view.linearLayout.setBackgroundResource(color[i%6]);
 
             return view;
         }
