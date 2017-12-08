@@ -1,11 +1,15 @@
 package com.msproject.myhome.moara;
 
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,16 +18,23 @@ import android.widget.ImageView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ModifyItem extends AppCompatActivity {
     ImageView imageView;
     EditText productName;
     EditText cost;
+    EditText comment;
     Button submit;
     Button cancel;
     Button modify;
@@ -32,6 +43,9 @@ public class ModifyItem extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
+    DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+    LayoutInflater mLayoutInflater;
+    Context mContext;
 
     int REQUEST_CODE_ADD = 100;
     int REQUEST_CODE_FAIL = 101;
@@ -45,36 +59,80 @@ public class ModifyItem extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
         productName = (EditText) findViewById(R.id.productName);
         cost = (EditText) findViewById(R.id.cost);
+        comment = (EditText)findViewById(R.id.comment);
         submit = (Button) findViewById(R.id.submit);
         cancel = (Button) findViewById(R.id.cencel);
+        mLayoutInflater = getLayoutInflater();
+        mContext = this;
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*StorageReference logoRef = storageReference.child(mAuth.getCurrentUser().getUid() + "/logo.jpg");
-                imageView.setDrawingCacheEnabled(true);
-                imageView.buildDrawingCache();
-                Bitmap bitmap = imageView.getDrawingCache();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
+                if(productName.getText().toString().equals("") || cost.getText().toString().equals("")){
+                    final CustomDialog customDialog = new CustomDialog();
+                    mLayoutInflater = getLayoutInflater();
+                    customDialog.getInstance(getApplicationContext(), mLayoutInflater, R.layout.submit_dialog);
+                    customDialog.show("상품명과 비용을 입력해주세요.", "확인");
+                    customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            customDialog.dismiss();
+                        }
+                    });
 
-                UploadTask uploadTask = logoRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    }
-                });*/
-                Intent intent = new Intent();
-                setResult(REQUEST_CODE_ADD,intent);
-                finish();
+                }
+                else{
+                    SharedPreferences preferences = getApplicationContext().getSharedPreferences("Account", MODE_PRIVATE);
+                    String uid = preferences.getString("uid", null); ;
+                    Store store = new Store(productName.getText().toString(), cost.getText().toString(), comment.getText().toString());
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+                    int year = calendar.get(Calendar.YEAR);
+                    calendar.set(year+1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+                    String date = "~" + dateFormat.format(calendar.getTime());
+                    DatabaseReference mConditionRef = mdatabase.child("/stores/" + uid + "/products/" + productName.getText().toString());
+                    mConditionRef.child("name").setValue(productName.getText().toString());
+                    mConditionRef.child("price").setValue(cost.getText().toString());
+                    mConditionRef.child("comment").setValue(comment.getText().toString());
+                    mConditionRef.child("until").setValue(date);
+
+                    StorageReference logoRef = storageReference.child(mAuth.getCurrentUser().getUid() + "/product/" + productName.getText().toString() + ".jpg");
+                    imageView.setDrawingCacheEnabled(true);
+                    imageView.buildDrawingCache();
+                    Bitmap bitmap = imageView.getDrawingCache();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+
+                    UploadTask uploadTask = logoRef.putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            final CustomDialog customDialog = new CustomDialog();
+
+                            customDialog.getInstance(mContext, mLayoutInflater, R.layout.submit_dialog);
+                            customDialog.show("등록이 완료되었습니다.", "확인");
+                            customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    customDialog.dismiss();
+                                    Intent intent = new Intent();
+                                    setResult(REQUEST_CODE_ADD,intent);
+                                    finish();
+                                }
+                            });
+
+                        }
+                    });
+                }
+
             }
         });
 

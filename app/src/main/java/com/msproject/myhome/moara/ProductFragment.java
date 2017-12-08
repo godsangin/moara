@@ -1,19 +1,34 @@
 package com.msproject.myhome.moara;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 
 public class ProductFragment extends Fragment {
@@ -24,6 +39,9 @@ public class ProductFragment extends Fragment {
     ListView productView;
     StoreProductAdapter adapter;
     Button addButton;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
 
     int index;
 
@@ -62,69 +80,33 @@ public class ProductFragment extends Fragment {
         productView.setAdapter(adapter);
 
         productView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onClick(View v) {//이미지 업로드 // storage
-                if(productName.getText().toString().equals("") || cost.getText().toString().equals("")){
-                    final CustomDialog customDialog = new CustomDialog();
-                    mLayoutInflater = getActivity().getLayoutInflater();
-                    customDialog.getInstance(getActivity(), mLayoutInflater, R.layout.submit_dialog);
-                    customDialog.show("상품명과 비용을 입력해주세요.", "확인");
-                    customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            customDialog.dismiss();
-                        }
-                    });
-
-                }
-                else{
-                    SharedPreferences preferences = getActivity().getSharedPreferences("Account", MODE_PRIVATE);
-                    String uid = preferences.getString("uid", null); ;
-                    Store store = new Store(productName.getText().toString(), cost.getText().toString(), comment.getText().toString());
-                    DatabaseReference mConditionRef = mdatabase.child("/stores/" + uid + "/product/" + productName.getText().toString());
-                    mConditionRef.child("name").setValue(productName.getText().toString());
-                    mConditionRef.child("price").setValue(cost.getText().toString());
-                    mConditionRef.child("comment").setValue(comment.getText().toString());
-
-                    StorageReference logoRef = storageReference.child(mAuth.getCurrentUser().getUid() + "/product/" + productName.getText().toString() + ".jpg");
-                    imageView.setDrawingCacheEnabled(true);
-                    imageView.buildDrawingCache();
-                    Bitmap bitmap = imageView.getDrawingCache();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
-
-                    UploadTask uploadTask = logoRef.putBytes(data);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle unsuccessful uploads
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                            final CustomDialog customDialog = new CustomDialog();
-                            mLayoutInflater = getActivity().getLayoutInflater();
-                            customDialog.getInstance(getActivity(), mLayoutInflater, R.layout.submit_dialog);
-                            customDialog.show("등록이 완료되었습니다.", "확인");
-                            customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                    transaction.add(R.id.content,SaveFragment.newInstance());
-                                    transaction.commit();
-                                    customDialog.dismiss();
-                                }
-                            });
-
-                        }
-                    });
-                }
          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 index = i;
+         }
+        });
+
+        DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mConditionRef = mdatabase.child("stores/" + MainActivity.uid + "/products");
+        Log.d("MainActivity.uid==", MainActivity.uid);
+        mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("snapshot", dataSnapshot.getValue().toString());
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    StoreProduct item = new StoreProduct(snapshot.child("name").getValue().toString(), snapshot.child("price").getValue().toString(), snapshot.child("until").getValue().toString(), snapshot.child("comment").getValue().toString());
+                    Log.d("name==", snapshot.child("name").getValue().toString());
+                    item.setImage(MainActivity.uid + "/product/" + snapshot.child("name").getValue().toString() + ".jpg");
+                    adapter.addItems(item);
+                    noProduct.setVisibility(View.INVISIBLE);
+
+                    productView.setAdapter(adapter);
+                    Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 완료 " , Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
@@ -147,11 +129,7 @@ public class ProductFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE_ADD){
             if(resultCode == RESULT_CODE_ADD){
-                adapter.addItems(new StoreProduct("상품 이름", "상품 코스트","상품 유효기간","상품 정보"));
-                noProduct.setVisibility(View.INVISIBLE);
-
-                productView.setAdapter(adapter);
-                Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 완료 " , Toast.LENGTH_SHORT).show();
+                getActivity().recreate();
             }
             else{
                 Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 실패 " , Toast.LENGTH_SHORT).show();
@@ -173,27 +151,13 @@ public class ProductFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == SELECT_PICTURE) {
-                Bitmap bm = null;
-                try {
-                    bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                bm=rotate(bm,270);
-                imageView.setImageBitmap(bm);
-                Uri selectedImageUri = data.getData();
-                getPath(selectedImageUri);
-            }
-    }
 
     class StoreProduct{
         String name;
         String cost;
         String validity;
         String info;
-        int image;
+        String imageSrc;
 
         public StoreProduct(String productName, String productCost, String productValidity, String productInfo){
             this.name = productName;
@@ -214,8 +178,8 @@ public class ProductFragment extends Fragment {
         public String getInfo(){return this.info;}
         public void setInfo(String info){this.info = info;}
 
-        public int getImage(){return this.image;}
-        public void setImage(int image){this.image = image;}
+        public String getImage(){return this.imageSrc;}
+        public void setImage(String imageSrc){this.imageSrc = imageSrc;}
     }
 
     class StoreProductAdapter extends BaseAdapter {
@@ -251,6 +215,7 @@ public class ProductFragment extends Fragment {
             TextView cost = (TextView) view.findViewById(R.id.store_product_cost);
             TextView validity = (TextView) view.findViewById(R.id.store_product_validity);
             TextView info = (TextView) view.findViewById(R.id.store_product_info);
+            ImageView imageView = (ImageView) view.findViewById(R.id.store_product_image);
 
             TextView modify = (TextView) view.findViewById(R.id.store_product_modify);
 
@@ -258,6 +223,8 @@ public class ProductFragment extends Fragment {
             cost.setText(items.get(position).getCost());
             validity.setText(items.get(position).getValidity());
             info.setText(items.get(position).getInfo());
+            StorageReference islandRef = storageRef.child(items.get(position).getImage());
+            Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(islandRef).into(imageView);
 
             modify.setOnClickListener(new View.OnClickListener() {
                 @Override

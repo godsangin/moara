@@ -28,7 +28,6 @@
             android:theme="@style/NoTitle01" />
         <activity android:name=".StoreItemView" />
         <activity android:name=".StoreDetailActivity"></activity>
-        <activity android:name=".CouponView_Null" />
         <activity android:name=".ModifyItem"></activity>
     </application>
 
