@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/GiftItemColor"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+
+            android:gravity="center">
+            <ImageView
+                android:layout_margin="10dp"
+                android:id="@+id/imageView"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:background="@drawable/bottom_round_background">
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상품 이름"
+                android:id="@+id/productName"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="#000"/>
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="유효기간"
+                android:id="@+id/productDate"
+                android:textSize="20dp"
+                android:textColor="#0223e0"
+                android:layout_marginTop="6dp"/>
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="보낸 사람"
+                android:id="@+id/from"
+                android:textSize="20dp"
+                android:textColor="#4902d6"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

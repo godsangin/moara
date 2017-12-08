@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_main"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_Main" />
+    <item
+        android:id="@+id/navigation_myCoupon"
+        android:icon="@drawable/ic_import_contacts_black_24dp"
+        android:title="@string/title_MyCoupon" />
+
+    <item
+        android:id="@+id/navigation_myItem"
+        android:icon="@drawable/ic_card_giftcard_black_24dp"
+        android:title="@string/title_MyItem" />
+
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/title_Setting" />
+
+</menu>

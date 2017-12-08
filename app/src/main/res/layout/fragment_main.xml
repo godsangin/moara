@@ -1,0 +1,87 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.msproject.myhome.moara.MainFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="mainFragment">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="이벤트"/>
+
+            <AdapterViewFlipper
+                android:id="@+id/event_tab"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:flipInterval="3000">
+            </AdapterViewFlipper>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="내 쿠폰"/>
+                <TextView
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/more_coupon"
+                    android:gravity="center"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:text="더보기"/>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/coupon_img_01"
+                android:scaleType="fitXY"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+            <TextView
+                android:gravity="center"
+                android:text="내 아이템"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+            <TextView
+                android:layout_alignParentRight="true"
+                android:id="@+id/more_item"
+                android:gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:text="더보기"/>
+            </RelativeLayout>
+
+            <com.msproject.myhome.moara.HorizontalListView
+                android:id="@+id/item_list"
+                android:layout_width="fill_parent"
+                android:layout_height="130dp"
+                android:background="#FFFFFF"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

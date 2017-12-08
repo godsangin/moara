@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Moara</string>
+    <string name="title_Main">Main</string>
+    <string name="title_MyCoupon">MyCoupon</string>
+    <string name="title_MyItem">MyItem</string>
+    <string name="title_Setting">Setting</string>
+    <string name="title_Save">Save</string>
+    <string name="title_Use">Use</string>
+    <string name="title_Product">Product</string>
+    <string name="title_Setting_Store">Setting</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+</resources>
