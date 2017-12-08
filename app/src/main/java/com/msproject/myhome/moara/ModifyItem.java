@@ -4,8 +4,10 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,7 +53,7 @@ public class ModifyItem extends AppCompatActivity {
 
     int REQUEST_CODE_ADD = 100;
     int REQUEST_CODE_FAIL = 101;
-
+    final int SELECT_PICTURE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,15 @@ public class ModifyItem extends AppCompatActivity {
         mLayoutInflater = getLayoutInflater();
         mContext = this;
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+             }
+         });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,4 +158,38 @@ public class ModifyItem extends AppCompatActivity {
             }
         });
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                    if (requestCode == SELECT_PICTURE) {
+                            Bitmap bm = null;
+                            try {
+                                    bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        imageView.setImageBitmap(bm);
+                            Uri selectedImageUri = data.getData();
+                            getPath(selectedImageUri);
+                        }
+    }
+    public String getPath(Uri uri) {
+                // uri가 null일경우 null반환
+                        if( uri == null ) {
+                        return null;
+                    }
+                // 미디어스토어에서 유저가 선택한 사진의 URI를 받아온다.
+                        String[] projection = { MediaStore.Images.Media.DATA };
+                Cursor cursor =getApplicationContext().getContentResolver().query(uri, projection, null, null, null);
+                if( cursor != null ){
+                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        cursor.moveToFirst();
+                        return cursor.getString(column_index);
+                    }
+               // URI경로를 반환한다.
+                        return uri.getPath();
+    }
+
+
+
 }
