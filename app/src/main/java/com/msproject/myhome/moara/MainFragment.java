@@ -105,7 +105,8 @@ public class MainFragment extends Fragment {
                 int i = 0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     GiftItem giftItem = snapshot.getValue(GiftItem.class);
-                    adapter.addItems(new Item(giftItem.getName(), R.drawable.product_00));
+                    adapter.addItems(new Item(giftItem.getName(),R.drawable.product_00));
+
                 }
             }
 

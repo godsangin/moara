@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="10dp">
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:background="@drawable/round_background"
+        android:backgroundTint="#B7D5FF"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_marginLeft="12dp"
+            android:layout_gravity="center"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:orientation="horizontal"
+            android:background="@drawable/round_background">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView"
+                android:layout_margin="15dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center">
+                <TextView
+                    android:id="@+id/storeName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="매장명"
+                    android:textSize="20dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/local"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="장소"
+                    android:textSize="20dp"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="매장설명"/>
+        <ListView
+            android:id="@+id/itemlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/addStore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="추가"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>
