@@ -33,7 +33,8 @@ public class SubmitStoreActivity extends AppCompatActivity {
     EditText where;
     EditText comment;
     Button submit;
-    Button cencel;
+    Button cancel;
+    Button back;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
@@ -49,13 +50,29 @@ public class SubmitStoreActivity extends AppCompatActivity {
         where = (EditText) findViewById(R.id.where);
         comment = (EditText) findViewById(R.id.comment);
         submit = (Button) findViewById(R.id.submit);
-        cencel = (Button) findViewById(R.id.cencel);
+        cancel = (Button) findViewById(R.id.cencel);
+        back = (Button) findViewById(R.id.back);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//이미지 업로드
 
             }
         });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override

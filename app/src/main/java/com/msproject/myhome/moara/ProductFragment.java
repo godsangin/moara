@@ -122,7 +122,7 @@ public class ProductFragment extends Fragment {
                     SharedPreferences preferences = getActivity().getSharedPreferences("Account", MODE_PRIVATE);
                     String uid = preferences.getString("uid", null); ;
                     Store store = new Store(productName.getText().toString(), cost.getText().toString(), comment.getText().toString());
-                    DatabaseReference mConditionRef = mdatabase.child("/stores/" + uid + "/" + productName.getText().toString());
+                    DatabaseReference mConditionRef = mdatabase.child("/stores/" + uid + "/product/" + productName.getText().toString());
                     mConditionRef.child("name").setValue(productName.getText().toString());
                     mConditionRef.child("price").setValue(cost.getText().toString());
                     mConditionRef.child("comment").setValue(comment.getText().toString());

@@ -105,7 +105,8 @@ public class MainFragment extends Fragment {
                 int i = 0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     GiftItem giftItem = snapshot.getValue(GiftItem.class);
-                    adapter.addItems(new Item(giftItem.getName(), getResources().getIdentifier("product_0"+i++, "drawable", "com.msproject.myhome.moara")));
+                    adapter.addItems(new Item(giftItem.getName(),R.drawable.product_00));
+
                 }
             }
 

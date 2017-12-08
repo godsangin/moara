@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:background="#5f99ff">
             <Button
+                android:id="@+id/back"
                 android:layout_width="44dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_arrow_back_black_24dp"
