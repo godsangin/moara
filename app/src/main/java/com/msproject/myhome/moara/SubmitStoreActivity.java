@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class SubmitStoreActivity extends AppCompatActivity {
     ImageView imageView;
@@ -40,6 +44,8 @@ public class SubmitStoreActivity extends AppCompatActivity {
     StorageReference storageReference = storage.getReference();
     DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
     LayoutInflater mLayoutInflater;
+
+    final int SELECT_PICTURE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +60,12 @@ public class SubmitStoreActivity extends AppCompatActivity {
         back = (Button) findViewById(R.id.back);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {//이미지 업로드
+            public void onClick(View v) {
+                //이미지 업로드
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
 
             }
         });
@@ -135,5 +146,39 @@ public class SubmitStoreActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SELECT_PICTURE) {
+            Bitmap bm = null;
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            imageView.setBackgroundColor(Color.parseColor("#000000"));
+            imageView.setImageBitmap(bm);
+            Uri selectedImageUri = data.getData();
+            getPath(selectedImageUri);
+        }
+    }
+    public String getPath(Uri uri) {
+        // uri가 null일경우 null반환
+        if( uri == null ) {
+            return null;
+        }
+        // 미디어스토어에서 유저가 선택한 사진의 URI를 받아온다.
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor =getApplicationContext().getContentResolver().query(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        // URI경로를 반환한다.
+        return uri.getPath();
     }
 }
