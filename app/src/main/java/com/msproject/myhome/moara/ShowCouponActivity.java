@@ -1,6 +1,9 @@
 package com.msproject.myhome.moara;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,6 +21,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
 
 import java.util.ArrayList;
 
@@ -96,7 +104,11 @@ public class ShowCouponActivity extends AppCompatActivity {
 
         builder.setPositiveButton("예", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialogI, int whichButton){
-                
+                //바코드 생성
+                Bitmap barcode = createBarcode("01065431313STARBUGS_AMERICANO");
+                //img.setImageBitmap(barcode);
+                //img.invalidate();
+                //ㄴ이부분은 MyItem에서 뒤집을때.
                 Toast.makeText(getApplicationContext(), "구매 완료", Toast.LENGTH_SHORT).show();
             }
         });
@@ -146,5 +158,25 @@ public class ShowCouponActivity extends AppCompatActivity {
 
             return view;
         }
+    }
+
+    //바코드 생성
+    public Bitmap createBarcode(String code){
+
+        Bitmap bitmap =null;
+        MultiFormatWriter gen = new MultiFormatWriter();
+        try {
+            final int WIDTH = 840;
+            final int HEIGHT = 160;
+            BitMatrix bytemap = gen.encode(code, BarcodeFormat.CODE_128, WIDTH, HEIGHT);
+            bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
+            for (int i = 0 ; i < WIDTH ; ++i)
+                for (int j = 0 ; j < HEIGHT ; ++j) {
+                    bitmap.setPixel(i, j, bytemap.get(i,j) ? Color.BLACK : Color.WHITE);
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }
