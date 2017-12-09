@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     public static String uid;
     String user_type;
     final int REQUEST_CODE_ADD_COUPON = 100;
-    final int RESULT_CODE_ADD_COUPON = 101;
+    final int RESULT_CODE_ADD_STAMP = 101;
+    final int RESULT_CODE_ADD_COUPON = 200;
 
     public static FragmentTransaction transaction;
 
@@ -175,11 +176,14 @@ public class MainActivity extends AppCompatActivity {
             String code = data.getStringExtra("code");
             Toast.makeText(MainActivity.this,code,Toast.LENGTH_LONG).show();
         }
+        else if(resultCode == RESULT_CODE_ADD_STAMP){
+            Toast.makeText(getApplicationContext(), "스탬프 등록 성공", Toast.LENGTH_SHORT).show();
+        }
         else if(resultCode == RESULT_CODE_ADD_COUPON){
             Toast.makeText(getApplicationContext(), "쿠폰 등록 성공", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getApplicationContext(), "쿠폰 등록 실패", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
         }
     }
 

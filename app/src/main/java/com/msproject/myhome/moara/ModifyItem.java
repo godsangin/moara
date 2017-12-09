@@ -51,7 +51,7 @@ public class ModifyItem extends AppCompatActivity {
     LayoutInflater mLayoutInflater;
     Context mContext;
 
-    int REQUEST_CODE_ADD = 100;
+    int REQUEST_CODE_ADD = 200;
     int REQUEST_CODE_FAIL = 101;
     final int SELECT_PICTURE = 1;
     @Override

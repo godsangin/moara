@@ -1,6 +1,7 @@
 package com.msproject.myhome.moara;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,6 +44,7 @@ public class CouponView extends LinearLayout {
     }
     public void setImg(String imgSrc){
         StorageReference islandRef = storageRef.child(imgSrc);
+        Log.d("imgSrc==", imgSrc);
         Glide.with(getContext()).using(new FirebaseImageLoader()).load(islandRef).into(myCoupon_img);
     }
     public void setBackground(int resId) {this.linearLayout.setBackgroundResource(resId);}

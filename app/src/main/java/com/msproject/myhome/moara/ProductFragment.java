@@ -91,7 +91,6 @@ public class ProductFragment extends Fragment {
         mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("snapshot", dataSnapshot.getValue().toString());
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     StoreProduct item = new StoreProduct(snapshot.child("name").getValue().toString(), snapshot.child("price").getValue().toString(), snapshot.child("until").getValue().toString(), snapshot.child("comment").getValue().toString());
                     Log.d("name==", snapshot.child("name").getValue().toString());

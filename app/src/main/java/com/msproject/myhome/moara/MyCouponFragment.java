@@ -13,24 +13,31 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MyCouponFragment extends Fragment {
     int REQUEST_CODE_ADD = 100;
 
-    ListView couponView;
-    CouponAdapter adapter;
+    static ListView couponView;
+    static CouponAdapter adapter;
     Button addButton;
 
     LinearLayout noCoupon;
@@ -69,13 +76,13 @@ public class MyCouponFragment extends Fragment {
 
         couponView.setAdapter(adapter);
 
-        couponView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                index = i;
-                showCoupon();
-            }
-        });
+//        couponView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                index = i;
+//                showCoupon();
+//            }
+//        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,22 +97,34 @@ public class MyCouponFragment extends Fragment {
         mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                for(final DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d("snapshot==", snapshot.getValue().toString());
                     adapter.addItems(new Coupon(snapshot.child("name").getValue().toString(), Integer.parseInt(snapshot.child("num").getValue().toString()), snapshot.child("storeUid").getValue().toString()));
 //                    Coupon stamp = snapshot.getValue(Coupon.class);
 //                    adapter.addItems(stamp);
+
+
                     couponView.setAdapter(adapter);
                     noCoupon.setVisibility(View.INVISIBLE);
                 }
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+        couponView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("NUM==" + position, adapter.items.get(position).getNum() + "");
+                adapter.setHashMap(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
+
 
     public void addCoupon(){
         Intent intent = new Intent(getActivity().getApplicationContext(), AddCouponActivity.class);
@@ -141,6 +160,7 @@ public class MyCouponFragment extends Fragment {
     class CouponAdapter extends BaseAdapter {
         ArrayList<Coupon> items = new ArrayList<Coupon>();
         int[] color = {R.drawable.round_00,R.drawable.round_01,R.drawable.round_02,R.drawable.round_03,R.drawable.round_04,R.drawable.round_05};
+        HashMap<String, String> hashMap = new HashMap();
 
         @Override
         public int getCount() {
@@ -165,19 +185,40 @@ public class MyCouponFragment extends Fragment {
 
         @Override
         public View getView(int i, View contextView, ViewGroup viewGroup) {
-            Coupon item = items.get(i);
+            String temp = Integer.toString(i);
+            Log.d("i==", temp);
+            if(hashMap.containsKey(Integer.toString(i))){
+                StampGridItemView view = new StampGridItemView(getContext());
+                Log.d("num==", items.get(i).getNum() + "");
+                view.setGridView(items.get(i), i);
+                view.linearLayout.setBackgroundResource(color[i%6]);
 
-            CouponView view = new CouponView(getActivity().getApplicationContext());
+                return view;
+            }
+            else{
+                Coupon item = items.get(i);
 
-            view.setName(item.coupon_name);
-            view.setImg(item.getImageSrc());
+                CouponView view = new CouponView(getActivity().getApplicationContext());
 
-            view.linearLayout.setBackgroundResource(color[i%6]);
+                view.setName(item.coupon_name);
+                view.setImg(item.getImageSrc());
 
-            return view;
+                view.linearLayout.setBackgroundResource(color[i%6]);
+                return view;
+            }
         }
-    }
 
+        public void setHashMap(int i){
+            if(!hashMap.containsKey(Integer.toString(i))){
+                hashMap.put(Integer.toString(i), "grid");
+            }
+            else{
+                hashMap.remove(Integer.toString(i));
+            }
+        }
+
+
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
