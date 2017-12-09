@@ -53,6 +53,7 @@ public class ShowCouponActivity extends AppCompatActivity {
 
         builder.setPositiveButton("예", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialogI, int whichButton){
+                
                 Toast.makeText(getApplicationContext(), "구매 완료", Toast.LENGTH_SHORT).show();
             }
         });
