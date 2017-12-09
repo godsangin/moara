@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -168,7 +169,9 @@ public class ModifyItem extends AppCompatActivity {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        imageView.setImageBitmap(bm);
+
+                            imageView.setBackgroundColor(Color.parseColor("#000000"));
+                            imageView.setImageBitmap(bm);
                             Uri selectedImageUri = data.getData();
                             getPath(selectedImageUri);
                         }
