@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 public class SettingFragment extends Fragment {
     ListView listView;
     SettingAdapter adapter;
-
+    final int SETTING_OK = 2;
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -57,7 +58,10 @@ public class SettingFragment extends Fragment {
                         break;
                     case 1:
                         break;
-                    case 2:
+                    case 2://알림설정
+                        Intent saintent= new Intent(getActivity(),SettingAlarmActivity.class);
+                        startActivityForResult(saintent,1);
+
                         break;
                     case 3:
                         FirebaseAuth.getInstance().signOut();
@@ -70,6 +74,14 @@ public class SettingFragment extends Fragment {
             }
         };
         listView.setOnItemClickListener(mItemClickListner);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == SETTING_OK){
+            Toast.makeText(getActivity(),"설정완료!",Toast.LENGTH_SHORT).show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

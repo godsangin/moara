@@ -128,7 +128,6 @@ public class MyCouponFragment extends Fragment {
 
     public void addCoupon(){
         Intent intent = new Intent(getActivity().getApplicationContext(), AddCouponActivity.class);
-
         startActivityForResult(intent, REQUEST_CODE_ADD);
     }
 
