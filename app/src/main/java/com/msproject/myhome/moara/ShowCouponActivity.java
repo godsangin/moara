@@ -1,21 +1,40 @@
 package com.msproject.myhome.moara;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 public class ShowCouponActivity extends AppCompatActivity {
     ListView listView;
     ProductAdapter adapter;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
 
     int index;
 
@@ -24,16 +43,31 @@ public class ShowCouponActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_coupon);
 
+        Intent intent = getIntent();
+        String storeUid = intent.getStringExtra("storeUid");
+
+        DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mConditionRef = mdatabase.child("stores/" + storeUid + "/products");
+
         listView = (ListView) findViewById(R.id.productList);
 
         adapter = new ProductAdapter();
 
-        adapter.addItems(new Product("커피", 5, R.drawable.product_00, null));
-        adapter.addItems(new Product("빵", 3, R.drawable.product_01, null));
-        adapter.addItems(new Product("케잌", 5, R.drawable.product_02, null));
-        adapter.addItems(new Product("토스트", 5, R.drawable.product_03, null));
+        mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    adapter.addItems(new Product(snapshot.child("name").getValue().toString(), snapshot.child("price").getValue().toString(), snapshot.child("until").getValue().toString(), snapshot.child("comment").getValue().toString(), snapshot.child("imageSrc").getValue().toString()));
+                    listView.setAdapter(adapter);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        listView.setAdapter(adapter);
+            }
+        });
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -43,13 +77,22 @@ public class ShowCouponActivity extends AppCompatActivity {
             }
         });
     }
+    public Drawable getDrawableFromBitmap(Bitmap bitmap){
+        Drawable d = new BitmapDrawable(bitmap);
+        return d;
+    }
+
 
     public void buyProduct(){
         Product selectedProduct = (Product) adapter.getItem(index);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ImageView imageView = null;
+        StorageReference islandRef = storageRef.child(selectedProduct.getImageSrc());
+        Glide.with(getApplicationContext()).using(new FirebaseImageLoader()).load(islandRef).into(imageView);
+        Bitmap bitmap = imageView.getDrawingCache(true);
         builder.setTitle(selectedProduct.getName());
         builder.setMessage("구매하시겠습니까? \n사용 쿠폰 : " + selectedProduct.getPrice() +" 개");
-        builder.setIcon(selectedProduct.getImage());
+        builder.setIcon(getDrawableFromBitmap(bitmap));
 
         builder.setPositiveButton("예", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialogI, int whichButton){
@@ -99,7 +142,7 @@ public class ShowCouponActivity extends AppCompatActivity {
             Product item = items.get(i);
             view.setName(item.getName());
             view.setPrice(item.getPrice());
-            view.setImage(item.getImage());
+            view.setImage(item.getImageSrc());
 
             return view;
         }

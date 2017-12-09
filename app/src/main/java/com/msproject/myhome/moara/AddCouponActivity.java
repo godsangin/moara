@@ -148,7 +148,7 @@ public class AddCouponActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Log.d("snapshot==", dataSnapshot.getValue().toString());
                         for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            if(input_name.equals(snapshot.child("name").getValue().toString())){
+                            if(input_name.equals(snapshot.child("name").getValue().toString())){//seaquence alignment를 적용해보자
 //                                Store item = snapshot.getValue(Store.class);
                                 String uid = snapshot.getKey().toString();
                                 Log.d("uid==", uid);

@@ -1,6 +1,7 @@
 package com.msproject.myhome.moara;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -22,6 +24,10 @@ public class StampGridItemView extends LinearLayout {
     LinearLayout linearLayout;
     ImageView imageView;
     View defaultView;
+    StampItemAdapter adapter;
+
+    int REQUEST_CODE_PRODUCT_VIEW = 300;
+
     public StampGridItemView(Context context) {
         super(context);
         init(context);
@@ -39,17 +45,16 @@ public class StampGridItemView extends LinearLayout {
         gridView = (GridView)view.findViewById(R.id.gridView);
         imageView = (ImageView)view.findViewById(R.id.change);
         linearLayout = (LinearLayout) findViewById(R.id.CouponColor);
-        StampItemAdapter adapter = new StampItemAdapter();
+        adapter = new StampItemAdapter();
         Coupon item = new Coupon();
         for(int i = 0; i < 10; i++){
             adapter.addItems(item);
         }
         gridView.setAdapter(adapter);
-
     }
 
-    public void setGridView(Coupon coupon, final int position){
-        StampItemAdapter adapter = new StampItemAdapter();
+    public void setGridView(final Coupon coupon, final int position){
+        adapter = new StampItemAdapter();
         Coupon item = new Coupon();
         for(int i = 0; i < 10; i++){
             adapter.addItems(item);
@@ -65,6 +70,15 @@ public class StampGridItemView extends LinearLayout {
         });
         adapter.notifyDataSetChanged();
         gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), ShowCouponActivity.class);
+                String storeUid = coupon.getImageSrc().split("/")[0];
+                intent.putExtra("storeUid", storeUid);
+                getContext().startActivity(intent);
+            }
+        });
     }
 
     class StampItemAdapter extends BaseAdapter{
