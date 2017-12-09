@@ -186,10 +186,8 @@ public class MyCouponFragment extends Fragment {
         @Override
         public View getView(int i, View contextView, ViewGroup viewGroup) {
             String temp = Integer.toString(i);
-            Log.d("i==", temp);
             if(hashMap.containsKey(Integer.toString(i))){
                 StampGridItemView view = new StampGridItemView(getContext());
-                Log.d("num==", items.get(i).getNum() + "");
                 view.setGridView(items.get(i), i);
                 view.linearLayout.setBackgroundResource(color[i%6]);
 

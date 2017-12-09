@@ -7,6 +7,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 /**
  * Created by user on 2017-11-17.
  */
@@ -15,6 +20,9 @@ public class ProductView extends LinearLayout{
     TextView name;
     TextView price;
     ImageView img;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+
 
     public ProductView(Context context){
         super(context);
@@ -39,5 +47,9 @@ public class ProductView extends LinearLayout{
 
     public void setName(String product_name){ name.setText(product_name);}
     public void setPrice(String product_price){ price.setText(product_price + " 개");}
-    public void setImage(int image) { img.setImageResource(image);}
+    public void setImage(String imageSrc) {
+        StorageReference islandRef = storageRef.child(imageSrc);
+        Glide.with(getContext()).using(new FirebaseImageLoader()).load(islandRef).into(img);
+
+    }
 }

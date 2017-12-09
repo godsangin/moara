@@ -1,5 +1,8 @@
 package com.msproject.myhome.moara;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+
 import java.text.NumberFormat;
 
 /**
@@ -9,7 +12,17 @@ import java.text.NumberFormat;
 public class Product {
     String name;
     String price;
-    int image;
+    String imageSrc;
+    String until;
+    String comment;
+
+    public String getUntil() {
+        return until;
+    }
+
+    public void setUntil(String until) {
+        this.until = until;
+    }
 
     public String getComment() {
         return comment;
@@ -19,13 +32,11 @@ public class Product {
         this.comment = comment;
     }
 
-    String comment;
-
-    public Product(String productName, int productPrice, int image, String comment){
+    public Product(String productName, String productPrice, String until, String comment, String imageSrc){
         this.comment = comment;
         this.name = productName;
-        this.price = String.valueOf(productPrice);
-        this.image = image;
+        this.price = productPrice;
+        this.imageSrc = imageSrc;
     }
     public String getName(){return this.name;}
     public void setName(String name){ this.name = name; }
@@ -33,6 +44,7 @@ public class Product {
     public String getPrice(){return this.price;}
     public void setPrice(String price){this.price = price;}
 
-    public int getImage(){return this.image;}
-    public void setImage(int image){this.image = image;}
+    public String getImageSrc(){return this.imageSrc;}
+    public void setImageSrc(String imageSrc){this.imageSrc = imageSrc;}
+
 }
