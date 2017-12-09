@@ -8,6 +8,7 @@ android {
     aaptOptions.useNewCruncher = false
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.msproject.myhome.moara"
         minSdkVersion 15
         targetSdkVersion 25
@@ -29,6 +30,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile files('libs/core-3.2.0.jar')
     compile files('libs/picasso-2.5.2.jar')
     //noinspection GradleCompatible
 
