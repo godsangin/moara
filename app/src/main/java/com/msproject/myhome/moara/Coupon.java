@@ -38,7 +38,7 @@ public class Coupon {
         return imageSrc;
     }
 
-    public void setImageSrd(String imageSrc) {
+    public void setImageSrc(String imageSrc) {
         this.imageSrc = imageSrc;
     }
 }
