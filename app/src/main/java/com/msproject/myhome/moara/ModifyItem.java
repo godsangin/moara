@@ -109,6 +109,7 @@ public class ModifyItem extends AppCompatActivity {
                     mConditionRef.child("price").setValue(cost.getText().toString());
                     mConditionRef.child("comment").setValue(comment.getText().toString());
                     mConditionRef.child("until").setValue(date);
+                    mConditionRef.child("imageSrc").setValue(uid + "/product/" + productName.getText().toString() + ".jpg");
 
                     StorageReference logoRef = storageReference.child(mAuth.getCurrentUser().getUid() + "/product/" + productName.getText().toString() + ".jpg");
                     imageView.setDrawingCacheEnabled(true);
