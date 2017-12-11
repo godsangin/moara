@@ -130,7 +130,6 @@ public class ProductFragment extends Fragment {
             if(resultCode == RESULT_CODE_ADD){
                 Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 완료 " , Toast.LENGTH_SHORT).show();
                 getActivity().recreate();
-
             }
             else{
                 Toast.makeText(getActivity().getApplicationContext(), " 상품 추가 실패 " , Toast.LENGTH_SHORT).show();

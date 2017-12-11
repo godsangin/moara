@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     final int REQUEST_CODE_ADD_COUPON = 100;
     final int RESULT_CODE_ADD_STAMP = 101;
     final int RESULT_CODE_ADD_COUPON = 200;
-
+    final int RESULT_CODE_ALARM_SETTING = 420;
     public static FragmentTransaction transaction;
 
     public static MenuItem second;
