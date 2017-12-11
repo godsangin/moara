@@ -27,7 +27,9 @@
                 <EditText
                     android:id="@+id/user_id"
                     android:layout_width="144sp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
