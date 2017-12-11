@@ -109,7 +109,6 @@ public class MyCouponFragment extends Fragment {
                 }
             }
 
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -124,7 +123,6 @@ public class MyCouponFragment extends Fragment {
             }
         });
     }
-
 
     public void addCoupon(){
         Intent intent = new Intent(getActivity().getApplicationContext(), AddCouponActivity.class);
