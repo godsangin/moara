@@ -20,11 +20,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -35,10 +39,10 @@ public class MyItemFragment extends Fragment {
     GridView gift_item_list;
     GiftItemAdapter gift_item_adapter;
 
+
     class GiftItemAdapter extends BaseAdapter{
         ArrayList<GiftItem> items;
         LayoutInflater layoutInflater;
-        int[] color = {R.drawable.round_top_00,R.drawable.round_top_01,R.drawable.round_top_02,R.drawable.round_top_03,R.drawable.round_top_04,R.drawable.round_top_05};
 
         public GiftItemAdapter(LayoutInflater layoutInflater) {
             this.items = new ArrayList<>();
@@ -60,19 +64,16 @@ public class MyItemFragment extends Fragment {
             return position;
         }
 
+        public void addItems(GiftItem item){items.add(item);}
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = layoutInflater.inflate(R.layout.activity_gift_item, null, false);
-            TextView textView =(TextView)view.findViewById(R.id.productName);
-            TextView textView2 =(TextView)view.findViewById(R.id.productDate);
-            TextView textView3 =(TextView)view.findViewById(R.id.from);
-            ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-            LinearLayout background = (LinearLayout) view.findViewById(R.id.GiftItemColor);
-
-            textView.setText(items.get(position).getName());
-            textView2.setText(items.get(position).getDate());
-            textView3.setText(items.get(position).getFrom());
-            background.setBackgroundResource(color[position%6]);
+            GiftItemView view = new GiftItemView(getActivity().getApplicationContext());
+            view.setName(items.get(position).getName());
+            view.setDate(items.get(position).getDate());
+            view.setFrom(items.get(position).getFrom());
+            view.setImage(items.get(position).getStoreUid() + "/product/" + items.get(position).getName() + ".jpg", getContext());
+            view.setBackground(position);
 
             return view;
         }
@@ -84,7 +85,6 @@ public class MyItemFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static MyItemFragment newInstance() {
         MyItemFragment fragment = new MyItemFragment();
-        fragment.addAllItems();
         return fragment;
     }
 
@@ -101,8 +101,30 @@ public class MyItemFragment extends Fragment {
 
         gift_item_list = (GridView) view.findViewById(R.id.myItemList);
         gift_item_adapter =  new GiftItemAdapter(inflater);
+        DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mConditionRef = mdatabase.child("/users/" + MainActivity.uid + "/giftitem/");
 
-        gift_item_list.setAdapter(gift_item_adapter);
+        mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for(DataSnapshot s: snapshot.getChildren()){
+                        Log.d("storeUid==", s.child("storeUid").getValue().toString());
+                        GiftItem item = s.getValue(GiftItem.class);
+                        gift_item_adapter.addItems(item);
+                        gift_item_list.setAdapter(gift_item_adapter);
+                    }
+                }
+                gift_item_adapter.notifyDataSetChanged();
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         gift_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -111,7 +133,6 @@ public class MyItemFragment extends Fragment {
             }
         });
 
-        gift_item_adapter.notifyDataSetChanged();
         return view;
     }
 
@@ -128,25 +149,6 @@ public class MyItemFragment extends Fragment {
 
     public void addAllItems(){
 
-        DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference mConditionRef = mdatabase.child("/users/" + MainActivity.uid + "/giftitem/");
-
-        mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int i = 0;
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    GiftItem item = snapshot.getValue(GiftItem.class);
-                    gift_item_adapter.items.add(item);
-                    gift_item_adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 }

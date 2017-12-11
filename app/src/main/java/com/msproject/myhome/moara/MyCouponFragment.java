@@ -182,7 +182,6 @@ public class MyCouponFragment extends Fragment {
 
         @Override
         public View getView(int i, View contextView, ViewGroup viewGroup) {
-            String temp = Integer.toString(i);
             if(hashMap.containsKey(Integer.toString(i))){
                 StampGridItemView view = new StampGridItemView(getContext());
                 view.setGridView(items.get(i), i);
