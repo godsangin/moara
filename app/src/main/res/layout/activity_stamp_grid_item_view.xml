@@ -18,7 +18,7 @@
                 android:id="@+id/change"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_camera_alt_black_24dp"
+                android:background="@drawable/ic_arrow_back_black_24dp"
                 />
         </LinearLayout>
         <GridView
@@ -27,8 +27,6 @@
             android:layout_height="wrap_content"
             android:numColumns="5"
             android:layout_marginLeft="10dp">
-
         </GridView>
-
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,8 @@
 package com.msproject.myhome.moara;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,10 @@ public class SettingAlarmActivity extends AppCompatActivity {
     Switch aSwitch5;
     Button button;
     final int SETTING_OK = 2;
+
+    //선언
+    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +32,10 @@ public class SettingAlarmActivity extends AppCompatActivity {
         aSwitch4 = (Switch) findViewById(R.id.Switch4);
         aSwitch5 = (Switch) findViewById(R.id.Switch5);
 
+        //데이터 호출
+        //String callValue = pref.getString("key","defaultvalue");
+
+
         button = (Button) findViewById(R.id.ApplyButton);
         button.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -34,7 +44,6 @@ public class SettingAlarmActivity extends AppCompatActivity {
                 intent.putExtra("code","Apply Success");
                 setResult(SETTING_OK,intent);
                 if(aSwitch1.isChecked()){// 받은 선물에 대한 알림(소켓통신)
-
                 }
                 if(aSwitch2.isChecked()){ // 쿠폰 사용에 대한 알림 (소켓통신)
                 }
@@ -45,8 +54,13 @@ public class SettingAlarmActivity extends AppCompatActivity {
                 }if(aSwitch5.isChecked()){ // 구매가능한 상품 알림
 
                 }
-                finish();
+                //데이터저장
+             /*   SharedPreferences.Editor editor = pref.edit();
+                editor.putString("key","value");
+                editor.commit();
+             */   finish();
             }
         });
     }
+
 }

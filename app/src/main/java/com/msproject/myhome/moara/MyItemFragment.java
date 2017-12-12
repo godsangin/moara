@@ -116,8 +116,6 @@ public class MyItemFragment extends Fragment {
                     }
                 }
                 gift_item_adapter.notifyDataSetChanged();
-
-
             }
 
             @Override
@@ -126,6 +124,7 @@ public class MyItemFragment extends Fragment {
             }
         });
 
+        // 눌렀을 때 바코드 출력
         gift_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
