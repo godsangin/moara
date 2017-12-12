@@ -31,8 +31,9 @@
         <activity android:name=".ModifyItem" />
         <activity android:name=".StampGridItem" />
         <activity android:name=".StampGridItemView" />
-        <activity android:name=".BuyProductDialog"></activity>
-        <activity android:name=".SettingAlarmActivity"></activity>
+        <activity android:name=".BuyProductDialog" />
+        <activity android:name=".SettingAlarmActivity" />
+        <activity android:name=".BarcodeDialog"></activity>
     </application>
 
 </manifest>
