@@ -128,7 +128,8 @@ public class MyItemFragment extends Fragment {
         gift_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                String barcodeString = gift_item_adapter.items.get(position).getBarcode();
+                
             }
         });
 

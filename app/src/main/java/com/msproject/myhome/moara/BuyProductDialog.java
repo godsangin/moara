@@ -24,6 +24,8 @@ import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+
 public class BuyProductDialog extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
@@ -85,7 +87,9 @@ public class BuyProductDialog extends AppCompatActivity {
                             mConditionRef.child("stamps/" + storeUid + "/num").setValue(remain_num);
                             String myName = dataSnapshot.child("name").getValue().toString();
                             Log.d("until", product.getUntil());
-                            GiftItem giftItem = new GiftItem(product.getName(), product.getUntil(), myName, storeUid);
+                            String uid_half = MainActivity.uid.substring(5);
+                            long barcodeString = System.currentTimeMillis();
+                            GiftItem giftItem = new GiftItem(product.getName(), product.getUntil(), myName, storeUid, String.valueOf(barcodeString) + uid_half);
                             mConditionRef.child("giftitem/" + storeUid + "/" + product.getName()).setValue(giftItem.toMap());
                             dialog.dismiss();
                         }
