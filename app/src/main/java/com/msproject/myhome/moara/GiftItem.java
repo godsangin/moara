@@ -12,16 +12,26 @@ public class GiftItem {
     public String from;
     public String name;
     public String storeUid;
+    public String barcode;
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
 
     public GiftItem() {
 
     }
 
-    public GiftItem(String name, String date, String from, String storeUid){
+    public GiftItem(String name, String date, String from, String storeUid, String barcode){
         this.name = name;
         this.date=date;
         this.from=from;
         this.storeUid= storeUid;
+        this.barcode = barcode;
     }
 
     @Exclude
@@ -31,6 +41,7 @@ public class GiftItem {
         result.put("date", date);
         result.put("from", from);
         result.put("storeUid", storeUid);
+        result.put("barcode", barcode);
 
         return result;
     }
@@ -46,5 +57,7 @@ public class GiftItem {
 
     public String getFrom(){return from;}
     public void setFrom(String from){this.from=from;}
+
+
 
 }
