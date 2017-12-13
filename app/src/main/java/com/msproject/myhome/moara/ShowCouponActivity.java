@@ -153,24 +153,4 @@ public class ShowCouponActivity extends AppCompatActivity {
             return view;
         }
     }
-
-    //바코드 생성
-    public Bitmap createBarcode(String code){
-
-        Bitmap bitmap =null;
-        MultiFormatWriter gen = new MultiFormatWriter();
-        try {
-            final int WIDTH = 840;
-            final int HEIGHT = 160;
-            BitMatrix bytemap = gen.encode(code, BarcodeFormat.CODE_128, WIDTH, HEIGHT);
-            bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
-            for (int i = 0 ; i < WIDTH ; ++i)
-                for (int j = 0 ; j < HEIGHT ; ++j) {
-                    bitmap.setPixel(i, j, bytemap.get(i,j) ? Color.BLACK : Color.WHITE);
-                }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
 }
