@@ -21,6 +21,12 @@
 
     </ListView>
     <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="알림"
+        android:id="@+id/alert"
+        app:layout_constraintBottom_toTopOf="@id/ApplyButton"/>
+    <Button
         android:layout_width="357dp"
         android:layout_height="67dp"
         android:id="@+id/ApplyButton"

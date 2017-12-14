@@ -28,9 +28,6 @@ public class BarcodeDialog extends AppCompatActivity {
     ImageView barcodeImage;
     String barcodeString;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
-
     public BarcodeDialog(String barcodeString){
         this.barcodeString = barcodeString;
     }
@@ -41,13 +38,14 @@ public class BarcodeDialog extends AppCompatActivity {
 
         builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-        dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
+
 
         barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
         Bitmap barcode = createBarcode(barcodeString);
         barcodeImage.setImageBitmap(barcode);
         barcodeImage.invalidate();
+
+        dialog = builder.create();
 
         return dialog;
     }
@@ -56,8 +54,6 @@ public class BarcodeDialog extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_dialog);
         //DB에서 유저정보,STROE정보,ITEM정보 가져오자.
-
-
     }
 
     public Bitmap createBarcode(String code){
@@ -83,8 +79,8 @@ public class BarcodeDialog extends AppCompatActivity {
 
     public void show(){
         barcodeImage.setImageBitmap(createBarcode(barcodeString));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
         dialog.show();
     }
 }
