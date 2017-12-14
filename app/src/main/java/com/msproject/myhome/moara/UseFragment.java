@@ -35,7 +35,6 @@ public class UseFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static UseFragment newInstance() {
         UseFragment fragment = new UseFragment();
         return fragment;
@@ -51,20 +50,17 @@ public class UseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_use, container, false);
-
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
     }
-
 
 }
