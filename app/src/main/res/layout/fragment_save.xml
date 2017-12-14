@@ -75,6 +75,7 @@
             android:layout_marginBottom="10dp"
             android:orientation="horizontal">
             <EditText
+                android:id="@+id/PhoneNumberText"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -85,6 +86,7 @@
                 android:textSize="15dp"/>
 
             <Button
+                android:id="@+id/SaveButton"
                 android:layout_weight="4"
                 android:layout_marginRight="10dp"
                 android:layout_width="match_parent"

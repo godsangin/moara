@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.msproject.myhome.moara.BarcodeDialog">
+    tools:context="com.msproject.myhome.moara.BarcodeDialog"
+    android:orientation="vertical">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="132dp"
-        android:id="@+id/BarcodeImage"
-        />
-
+        android:layout_height="120dp"
+        android:id="@+id/BarcodeImage" />
+    <TextView
+        android:id="@+id/BarcodeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12dp"
+        android:textAlignment="center"/>
 </LinearLayout>
-</android.support.constraint.ConstraintLayout>
 

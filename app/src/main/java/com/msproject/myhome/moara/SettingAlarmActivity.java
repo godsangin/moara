@@ -19,7 +19,7 @@ public class SettingAlarmActivity extends AppCompatActivity {
     final int SETTING_OK = 2;
 
     //선언
-    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    //SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

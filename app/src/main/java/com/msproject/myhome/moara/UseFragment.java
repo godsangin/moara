@@ -13,9 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +33,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class UseFragment extends Fragment {
 
-
+    DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
+    EditText couponNumber;
+    Button useButton;
+    char[] barcode;
+    String barcodeString;
+    char[] charUserName;
+    String userName;
     public UseFragment() {
         // Required empty public constructor
     }

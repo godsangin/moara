@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,7 +42,8 @@ public class SaveFragment extends Fragment {
     StorageReference storageRef = storage.getReference();
     DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
     LayoutInflater mLayoutInflater;
-
+    EditText phoneNumber;
+    Button saveButton;
     public SaveFragment() {
         // Required empty public constructor
     }
@@ -63,12 +66,14 @@ public class SaveFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_save, container, false);
         imageView = (ImageView)view.findViewById(R.id.imageView);
         storeName = (TextView) view.findViewById(R.id.storeName);
+        phoneNumber = (EditText) view.findViewById(R.id.PhoneNumberText);
+        saveButton = (Button) view.findViewById(R.id.SaveButton);
 
         DatabaseReference mConditionRef = mdatabase.child("/stores/" + MainActivity.uid);
         mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("name").getValue() != null){
+                if(dataSnapshot.child("barcode").getValue() != null){
                     storeName.setText(dataSnapshot.child("name").getValue().toString());
                 }
 
@@ -82,6 +87,13 @@ public class SaveFragment extends Fragment {
         StorageReference islandRef = storageRef.child(MainActivity.uid + "/store/logo.jpg");
         Glide.with(getContext()).using(new FirebaseImageLoader()).load(islandRef).into(imageView);
 
+
+        saveButton.setOnClickListener(new View.OnClickListener() { //적립버튼클릭
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         return view;
     }
 
