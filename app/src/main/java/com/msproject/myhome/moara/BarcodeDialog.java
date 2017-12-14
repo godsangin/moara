@@ -27,42 +27,23 @@ public class BarcodeDialog extends AppCompatActivity {
     ImageView barcodeImage;
     String barcodeString;
 
-    private AlertDialog.Builder builder;
-    private AlertDialog dialog;
-    private View dialogView;
-
-    public AlertDialog getInstance(Context context, LayoutInflater inflater, int layout) {
-        dialogView = inflater.inflate(layout, null);
-
-        builder = new AlertDialog.Builder(context);
-
-        barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
-      dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
-
-        return dialog;
-      
-
-    }
     public BarcodeDialog(String barcodeString){
         this.barcodeString = barcodeString;
     }
-
-
-
 
     public AlertDialog getInstance(Context context, LayoutInflater inflater, int layout) {
         dialogView = inflater.inflate(layout, null);
 
         builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-        dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
+
 
         barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
         Bitmap barcode = createBarcode(barcodeString);
         barcodeImage.setImageBitmap(barcode);
         barcodeImage.invalidate();
+
+        dialog = builder.create();
 
         return dialog;
     }
@@ -71,7 +52,6 @@ public class BarcodeDialog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_dialog);
-
     }
 
     public Bitmap createBarcode(String code){
@@ -100,8 +80,8 @@ public class BarcodeDialog extends AppCompatActivity {
 
     public void show(){
         barcodeImage.setImageBitmap(createBarcode(barcodeString));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
         dialog.show();
     }
 }
