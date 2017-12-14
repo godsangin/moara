@@ -6,11 +6,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-
 import android.view.View;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,11 +27,10 @@ public class BarcodeDialog extends AppCompatActivity {
     private View dialogView;
     ImageView barcodeImage;
     String barcodeString;
-
+    TextView barcodeText;
     public BarcodeDialog(String barcodeString){
         this.barcodeString = barcodeString;
     }
-
 
     public AlertDialog getInstance(Context context, LayoutInflater inflater, int layout) {
         dialogView = inflater.inflate(layout, null);
@@ -39,21 +38,21 @@ public class BarcodeDialog extends AppCompatActivity {
         builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
 
-
+        barcodeText = (TextView) dialogView.findViewById(R.id.BarcodeText);
         barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
         Bitmap barcode = createBarcode(barcodeString);
         barcodeImage.setImageBitmap(barcode);
+
         barcodeImage.invalidate();
-
         dialog = builder.create();
-
         return dialog;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_dialog);
-        //DB에서 유저정보,STROE정보,ITEM정보 가져오자.
+
     }
 
     public Bitmap createBarcode(String code){
@@ -77,10 +76,15 @@ public class BarcodeDialog extends AppCompatActivity {
     }
 
 
+
+
+
     public void show(){
+        barcodeText.setText(barcodeString);
         barcodeImage.setImageBitmap(createBarcode(barcodeString));
         dialog.setCanceledOnTouchOutside(true);
         dialog.setCancelable(true);
         dialog.show();
     }
 }
+
