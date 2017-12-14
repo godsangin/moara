@@ -5,11 +5,6 @@
     tools:context="com.msproject.myhome.moara.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <include
-        layout="@layout/toolbar"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"

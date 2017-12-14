@@ -19,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 public class CouponView extends LinearLayout {
     TextView myCoupon_name;
     ImageView myCoupon_img;
+    TextView myCoupon_number;
     LinearLayout linearLayout;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -36,7 +37,9 @@ public class CouponView extends LinearLayout {
 
         myCoupon_img = (ImageView) findViewById(R.id.myCoupon_img);
         myCoupon_name = (TextView) findViewById(R.id.myCoupon_name);
+        myCoupon_number = (TextView) findViewById(R.id.number_of_stamp);
         linearLayout = (LinearLayout) findViewById(R.id.CouponColor);
+
     }
 
     public void setName(String name){
@@ -48,4 +51,8 @@ public class CouponView extends LinearLayout {
         Glide.with(getContext()).using(new FirebaseImageLoader()).load(islandRef).into(myCoupon_img);
     }
     public void setBackground(int resId) {this.linearLayout.setBackgroundResource(resId);}
+
+    public void setNumber(int number) {
+        this.myCoupon_number.setText(String.valueOf(number) + " 개");
+    }
 }

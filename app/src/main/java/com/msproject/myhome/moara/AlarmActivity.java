@@ -13,6 +13,7 @@ import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class AlarmActivity extends AppCompatActivity {
     Button alert;
@@ -39,7 +40,12 @@ public class AlarmActivity extends AppCompatActivity {
         alert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotificationSomethings();
+                Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AlarmActivity.this, MyService.class);
+                startService(intent);
+
+
+//                NotificationSomethings();
             }
         });
     }

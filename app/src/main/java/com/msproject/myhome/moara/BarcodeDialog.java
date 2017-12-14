@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +27,7 @@ public class BarcodeDialog extends AppCompatActivity {
     private View dialogView;
     ImageView barcodeImage;
     String barcodeString;
-
+    TextView barcodeText;
     public BarcodeDialog(String barcodeString){
         this.barcodeString = barcodeString;
     }
@@ -37,14 +38,13 @@ public class BarcodeDialog extends AppCompatActivity {
         builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
 
-
+        barcodeText = (TextView) dialogView.findViewById(R.id.BarcodeText);
         barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
         Bitmap barcode = createBarcode(barcodeString);
         barcodeImage.setImageBitmap(barcode);
+
         barcodeImage.invalidate();
-
         dialog = builder.create();
-
         return dialog;
     }
 
@@ -52,6 +52,7 @@ public class BarcodeDialog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_dialog);
+
     }
 
     public Bitmap createBarcode(String code){
@@ -79,6 +80,7 @@ public class BarcodeDialog extends AppCompatActivity {
 
 
     public void show(){
+        barcodeText.setText(barcodeString);
         barcodeImage.setImageBitmap(createBarcode(barcodeString));
         dialog.setCanceledOnTouchOutside(true);
         dialog.setCancelable(true);

@@ -8,16 +8,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,6 +40,7 @@ public class BuyProductDialog extends AppCompatActivity {
     public TextView comment;
     public Button buy;
     public Button gift;
+    public LinearLayout giftLayout;
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -60,6 +65,7 @@ public class BuyProductDialog extends AppCompatActivity {
         comment = (TextView)dialogView.findViewById(R.id.comment);
         buy = (Button)dialogView.findViewById(R.id.buy);
         gift = (Button)dialogView.findViewById(R.id.gift);
+        giftLayout = (LinearLayout) dialogView.findViewById(R.id.gift_layout);
 
         productName.setText(product.getName());
         cost.setText(product.getPrice());
@@ -67,12 +73,12 @@ public class BuyProductDialog extends AppCompatActivity {
 
         StorageReference islandRef = storageRef.child(product.getImageSrc());
         Glide.with(context).using(new FirebaseImageLoader()).load(islandRef).into(imageView);
+        final String storeUid = product.getImageSrc().split("/")[0];
 
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //상품구매 stamp차감
-                final String storeUid = product.getImageSrc().split("/")[0];
                 DatabaseReference mdataReference = FirebaseDatabase.getInstance().getReference();
                 final DatabaseReference mConditionRef = mdataReference.child("users/" + MainActivity.uid);
 
@@ -111,11 +117,70 @@ public class BuyProductDialog extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //상품 선물 stamp차감
+                giftLayout.setVisibility(View.VISIBLE);
+                final EditText input = (EditText) dialogView.findViewById(R.id.gift_phone_number);
+                Button verifyButton = (Button) dialogView.findViewById(R.id.gift_verify_bt);
+                verifyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(input.getText().toString().equals("")) {
+                            Toast.makeText(context, "전화번호가 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            final DatabaseReference ref = database.getReference("users");
 
+                            final String fromName = ref.child(MainActivity.uid).child("name").toString();
+
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    boolean exist = false;
+                                    String key = null;
+
+                                    int remain_num = Integer.parseInt(dataSnapshot.child(MainActivity.uid + "/stamps/" + storeUid +"/num").getValue().toString());
+                                    int product_price = Integer.parseInt(product.getPrice());
+                                    if(remain_num >= product_price) {
+                                        remain_num -= product_price;
+                                        ref.child(MainActivity.uid + "/stamps/" + storeUid + "/num").setValue(remain_num);
+
+                                        for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                            String tel = snapshot.child("tel").getValue().toString() == null ? "" : snapshot.child("tel").getValue().toString();
+                                            if(tel.equals(input.getText().toString())) {
+                                                key = snapshot.getKey();
+                                                exist = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if(exist) {
+                                            DatabaseReference giftRef = database.getReference("users/" + key + "/giftItem/" + storeUid + "/");
+                                            String barcode = String.valueOf(System.currentTimeMillis()) + MainActivity.uid.substring(5);
+                                            giftRef.child(productName.getText().toString()).setValue(new GiftItem(product.getName(), product.getUntil(), fromName, storeUid, barcode));
+                                            dialog.dismiss();
+                                            Toast.makeText(context, "선물이 완료되었습니다.", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(context, "회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                                        }
+
+                                    }
+                                    else {
+                                        Toast.makeText(context, "보유한 스탬프가 부족합니다.", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
         dialog.show();
     }
 

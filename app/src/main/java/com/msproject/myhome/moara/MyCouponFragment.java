@@ -196,6 +196,7 @@ public class MyCouponFragment extends Fragment {
 
                 view.setName(item.coupon_name);
                 view.setImg(item.getImageSrc());
+                view.setNumber(items.get(i).getNum());
 
                 view.linearLayout.setBackgroundResource(color[i%6]);
                 return view;

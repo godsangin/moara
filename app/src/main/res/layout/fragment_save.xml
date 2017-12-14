@@ -66,6 +66,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/save_add_product"
                 android:layout_weight="1"
@@ -81,6 +82,7 @@
             <Button
                 android:id="@+id/save_stamp"
                 android:layout_weight="1"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/my_button"

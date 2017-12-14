@@ -31,7 +31,7 @@ public class SaveFragment extends Fragment {
     CustomDialog customDialog;
     CustomDialog2 customDialog2;
     int position;
-
+  
     public SaveFragment() {
         // Required empty public constructor
     }
@@ -51,6 +51,7 @@ public class SaveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_save, container, false);
+
         add_product = (Button) view.findViewById(R.id.save_add_product);
         save_stamp = (Button) view.findViewById(R.id.save_stamp);
         sum_stamp = (TextView) view.findViewById(R.id.sumStamp);
@@ -61,6 +62,7 @@ public class SaveFragment extends Fragment {
 
         add_product.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View view) {
                 customDialog = new CustomDialog(getContext(), new CustomDialog.ICustomDialogEventListener() {
                     public void customDialogEvent(String name, String count, String stamp) {
@@ -133,6 +135,7 @@ public class SaveFragment extends Fragment {
         });
 
         builder.show();
+
     }
 
     @Override
