@@ -10,4 +10,7 @@
         android:layout_height="132dp"
         android:id="@+id/BarcodeImage"
         />
+
 </LinearLayout>
+</android.support.constraint.ConstraintLayout>
+

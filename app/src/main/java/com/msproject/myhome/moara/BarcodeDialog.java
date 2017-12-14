@@ -1,6 +1,7 @@
 package com.msproject.myhome.moara;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,10 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 public class BarcodeDialog extends AppCompatActivity {
+
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
+    private View dialogView;
     ImageView barcodeImage;
     String barcodeString;
 
@@ -32,35 +37,32 @@ public class BarcodeDialog extends AppCompatActivity {
         builder = new AlertDialog.Builder(context);
 
         barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
+      dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
 
-        DatabaseReference mdataReference = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference mConditionRef = mdataReference.child("users/" + MainActivity.uid);
+        return dialog;
+      
 
-        mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String barcodString = dataSnapshot.child("tel").getValue().toString();
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    for(DataSnapshot s : snapshot.getChildren()){
+    }
+    public BarcodeDialog(String barcodeString){
+        this.barcodeString = barcodeString;
+    }
 
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+
+    public AlertDialog getInstance(Context context, LayoutInflater inflater, int layout) {
+        dialogView = inflater.inflate(layout, null);
+
+        builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-
-
-        Bitmap barcode = createBarcode("1234567890123ABCDEFGHIJKLM");
-        barcodeImage.setImageBitmap(barcode);
-        barcodeImage.invalidate();
-
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(true);
+
+        barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
+        Bitmap barcode = createBarcode(barcodeString);
+        barcodeImage.setImageBitmap(barcode);
+        barcodeImage.invalidate();
 
         return dialog;
     }
@@ -69,9 +71,6 @@ public class BarcodeDialog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_dialog);
-
-
-        //DB에서 유저정보,STROE정보,ITEM정보 가져오자.
 
     }
 
@@ -94,4 +93,16 @@ public class BarcodeDialog extends AppCompatActivity {
 
         return bitmap;
     }
+
+
+
+
+
+    public void show(){
+        barcodeImage.setImageBitmap(createBarcode(barcodeString));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+    }
 }
+

@@ -129,9 +129,11 @@ public class MyItemFragment extends Fragment {
         gift_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BarcodeDialog barcodeDialog = new BarcodeDialog();
-                AlertDialog dialog = barcodeDialog.getInstance(getContext(), inflater, R.layout.activity_barcode_dialog);
-                dialog.show();
+                String barcodeString = gift_item_adapter.items.get(position).getBarcode();
+                Log.d("barcode", barcodeString);
+                final BarcodeDialog barcodeDialog = new BarcodeDialog(barcodeString);
+                barcodeDialog.getInstance(getContext(), inflater, R.layout.activity_barcode_dialog);
+                barcodeDialog.show();
             }
         });
 
