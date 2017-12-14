@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,7 +95,7 @@ public class MyItemFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_item, container, false);
@@ -128,7 +129,10 @@ public class MyItemFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String barcodeString = gift_item_adapter.items.get(position).getBarcode();
-
+                Log.d("barcode", barcodeString);
+                final BarcodeDialog barcodeDialog = new BarcodeDialog(barcodeString);
+                barcodeDialog.getInstance(getContext(), inflater, R.layout.activity_barcode_dialog);
+                barcodeDialog.show();
             }
         });
 
