@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
@@ -16,12 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 public class BarcodeDialog extends AppCompatActivity {
+
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
     private View dialogView;
@@ -79,6 +79,7 @@ public class BarcodeDialog extends AppCompatActivity {
 
         return bitmap;
     }
+
 
     public void show(){
         barcodeImage.setImageBitmap(createBarcode(barcodeString));

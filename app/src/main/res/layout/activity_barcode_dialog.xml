@@ -11,4 +11,5 @@
         android:id="@+id/BarcodeImage"
         />
 
+
 </android.support.constraint.ConstraintLayout>
