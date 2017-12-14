@@ -6,9 +6,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by sanginLee on 2017-12-15.
- */
 @IgnoreExtraProperties
 public class Alarm {
     boolean gift;
