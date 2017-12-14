@@ -1,8 +1,10 @@
 package com.msproject.myhome.moara;
 
-import android.provider.ContactsContract;
+import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
@@ -19,11 +21,18 @@ import com.google.zxing.common.BitMatrix;
 public class BarcodeDialog extends AppCompatActivity {
     ImageView barcodeImage;
     String barcodeString;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode_dialog);
-        //DB에서 유저정보,STROE정보,ITEM정보 가져오자.
+
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
+    private View dialogView;
+
+    public AlertDialog getInstance(Context context, LayoutInflater inflater, int layout) {
+        dialogView = inflater.inflate(layout, null);
+
+        builder = new AlertDialog.Builder(context);
+
+        barcodeImage =(ImageView) dialogView.findViewById(R.id.BarcodeImage);
+
         DatabaseReference mdataReference = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference mConditionRef = mdataReference.child("users/" + MainActivity.uid);
 
@@ -33,7 +42,7 @@ public class BarcodeDialog extends AppCompatActivity {
                 String barcodString = dataSnapshot.child("tel").getValue().toString();
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     for(DataSnapshot s : snapshot.getChildren()){
-                        barcodString += s.child("name").getValue().toString();
+
                     }
                 }
             }
@@ -43,13 +52,27 @@ public class BarcodeDialog extends AppCompatActivity {
 
             }
         });
+        builder.setView(dialogView);
 
-        barcodeString = mConditionRef.ge
 
-        barcodeImage =(ImageView) findViewById(R.id.BarcodeImage);
-        Bitmap barcode = createBarcode(barcodeString);
+        Bitmap barcode = createBarcode("1234567890123ABCDEFGHIJKLM");
         barcodeImage.setImageBitmap(barcode);
         barcodeImage.invalidate();
+
+        dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
+
+        return dialog;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_barcode_dialog);
+
+
+        //DB에서 유저정보,STROE정보,ITEM정보 가져오자.
+
     }
 
     public Bitmap createBarcode(String code){
