@@ -73,7 +73,7 @@ public class BuyProductDialog extends AppCompatActivity {
             public void onClick(View v) {
                 //상품구매 stamp차감
                 final String storeUid = product.getImageSrc().split("/")[0];
-                DatabaseReference mdataReference = FirebaseDatabase.getInstance().getReference();
+                final DatabaseReference mdataReference = FirebaseDatabase.getInstance().getReference();
                 final DatabaseReference mConditionRef = mdataReference.child("users/" + MainActivity.uid);
 
                 mConditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -91,6 +91,7 @@ public class BuyProductDialog extends AppCompatActivity {
                             long barcodeString = System.currentTimeMillis();
                             GiftItem giftItem = new GiftItem(product.getName(), product.getUntil(), myName, storeUid, String.valueOf(barcodeString) + uid_half);
                             mConditionRef.child("giftitem/" + storeUid + "/" + product.getName()).setValue(giftItem.toMap());
+                            mdataReference.child("users/" + MainActivity.uid).child("alarm").child("save").setValue(true);
                             dialog.dismiss();
                         }
                         else {
@@ -111,11 +112,11 @@ public class BuyProductDialog extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //상품 선물 stamp차감
-
+                
             }
         });
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
         dialog.show();
     }
 

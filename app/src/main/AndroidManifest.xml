@@ -30,7 +30,12 @@
         <activity android:name=".ModifyItem" />
         <activity android:name=".BuyProductDialog" />
         <activity android:name=".SettingAlarmActivity" />
-        <activity android:name=".notification_something"></activity>
+        <activity android:name=".NotificationSomething" />
+
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
