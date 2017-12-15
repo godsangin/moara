@@ -186,6 +186,7 @@ public class AddCouponActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE_ADD){
             if(resultCode == RESULT_CODE_ADD){
+                store_item_adapter.notifyDataSetChanged();
                 Intent intent = new Intent();
                 setResult(RESULT_CODE_ADD, intent);
                 finish();

@@ -91,6 +91,7 @@ public class UseFragment extends Fragment {
                                         if(s.child("barcode").getValue().toString().equals(barcodeString)){
                                             usersRef.child(snapshot.getKey().toString() + "/giftitem/" + snap.getKey().toString() + "/" + s.getKey().toString()).removeValue();
                                             Toast.makeText(getActivity(),"사용완료",Toast.LENGTH_SHORT).show();
+                                            usersRef.child(snapshot.getKey().toString() + "/alarm/buy").setValue(true);
                                             //알림추가
 
 

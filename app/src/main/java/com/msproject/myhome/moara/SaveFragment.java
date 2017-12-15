@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -81,7 +89,7 @@ public class SaveFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 customDialog2 = new CustomDialog2(getContext(), Integer.parseInt(sum_stamp.getText().toString().substring(0,1)), new CustomDialog2.ICustomDialogEventListener() {
-                    public void customDialogEvent(String tel, int count) {
+                    public void customDialogEvent(final String tel, final int count) {
 
                         /* 여기다 만드셈 */
                         /* 여기다 만드셈 */
@@ -97,6 +105,32 @@ public class SaveFragment extends Fragment {
                         /* 여기다 만드셈 */
                         /* 여기다 만드셈 */
                         /* 여기다 만드셈 */
+
+                        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                        mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                    if(snapshot.child("tel").getValue().toString().equals(tel)){
+                                        if(!(snapshot.child("stamps/" + MainActivity.uid).getValue()==null)){
+                                            Log.d("key==", snapshot.getKey());
+                                            String oldVal = snapshot.child("stamps/" + MainActivity.uid + "/num").getValue().toString();
+                                            int num = Integer.parseInt(oldVal);
+                                            num = num + count;
+                                            mDatabase.child("users/" + snapshot.getKey().toString() + "/stamps/" + MainActivity.uid + "/num").setValue(String.valueOf(num));
+                                        }
+                                        else{
+                                            Toast.makeText(getContext(), "매장을 등록하지 않은 고객입니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                     }
                 });
