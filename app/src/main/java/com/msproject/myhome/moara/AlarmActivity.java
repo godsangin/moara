@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class AlarmActivity extends AppCompatActivity {
     Button alert;
     Button button;
@@ -40,6 +43,9 @@ public class AlarmActivity extends AppCompatActivity {
         alert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                Alarm alarm = new Alarm(false, false, false);
+                mDatabase.child("users/" + MainActivity.uid + "/alarm").setValue(alarm.toMap());
                 Toast.makeText(getApplicationContext(),"Service 시작",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AlarmActivity.this, MyService.class);
                 startService(intent);

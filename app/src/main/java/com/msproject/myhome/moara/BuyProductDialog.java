@@ -1,6 +1,7 @@
 package com.msproject.myhome.moara;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -148,14 +149,18 @@ public class BuyProductDialog extends AppCompatActivity {
                                             if(tel.equals(input.getText().toString())) {
                                                 key = snapshot.getKey();
                                                 exist = true;
+
                                                 break;
                                             }
                                         }
 
                                         if(exist) {
-                                            DatabaseReference giftRef = database.getReference("users/" + key + "/giftItem/" + storeUid + "/");
+                                            DatabaseReference alarm = database.getReference("users/" + key + "/alarm");
+                                            alarm.child("gift").setValue(true);
+                                            DatabaseReference giftRef = database.getReference("users/" + key + "/giftitem/" + storeUid + "/");
                                             String barcode = String.valueOf(System.currentTimeMillis()) + MainActivity.uid.substring(5);
                                             giftRef.child(productName.getText().toString()).setValue(new GiftItem(product.getName(), product.getUntil(), fromName, storeUid, barcode));
+
                                             dialog.dismiss();
                                             Toast.makeText(context, "선물이 완료되었습니다.", Toast.LENGTH_LONG).show();
                                         } else {
