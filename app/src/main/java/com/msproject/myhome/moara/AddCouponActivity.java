@@ -42,7 +42,6 @@ import java.util.zip.Inflater;
 public class AddCouponActivity extends AppCompatActivity {
     ListView store_item_list;
     StoreItemAdapter store_item_adapter;
-    Button add, back;
     Button search;
     EditText search_bar;
     // Create a storage reference from our app
@@ -99,8 +98,6 @@ public class AddCouponActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
         String uid = preferences.getString("uid", null);
 
-        add = (Button) findViewById(R.id.add);
-        back = (Button) findViewById(R.id.back);
         search = (Button) findViewById(R.id.search);
         search_bar = (EditText) findViewById(R.id.search_bar);
 
@@ -109,31 +106,7 @@ public class AddCouponActivity extends AppCompatActivity {
 
         store_item_list.setAdapter(store_item_adapter);
 
-        store_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
         store_item_adapter.notifyDataSetChanged();
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                setResult(REQUEST_CODE_ADD,intent);
-                finish();
-            }
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                setResult(REQUEST_CODE_FAIL,intent);
-                finish();
-            }
-        });
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +121,7 @@ public class AddCouponActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Log.d("snapshot==", dataSnapshot.getValue().toString());
                         for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            if(input_name.equals(snapshot.child("name").getValue().toString())){//seaquence alignment를 적용해보자
+                            if(snapshot.child("name").getValue().toString().contains(input_name)){//seaquence alignment를 적용해보자
 //                                Store item = snapshot.getValue(Store.class);
                                 String uid = snapshot.getKey().toString();
                                 Log.d("uid==", uid);
@@ -186,7 +159,6 @@ public class AddCouponActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE_ADD){
             if(resultCode == RESULT_CODE_ADD){
-                store_item_adapter.notifyDataSetChanged();
                 Intent intent = new Intent();
                 setResult(RESULT_CODE_ADD, intent);
                 finish();

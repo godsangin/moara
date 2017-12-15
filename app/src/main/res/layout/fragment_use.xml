@@ -6,64 +6,57 @@
     tools:context="com.msproject.myhome.moara.UseFragment"
     android:background="#EEEEEE">
 
-
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="0dp"
+            android:layout_height="320dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                android:layout_marginTop="30dp"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:background="@drawable/round_background"
-                android:backgroundTint="#FFFFFF">
-                <ImageView
-                    android:background="@drawable/round_box"
-                    android:layout_margin="10dp"
-                    android:padding="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/icon_cake"
-                    />
-            </LinearLayout>
+            <com.journeyapps.barcodescanner.CompoundBarcodeView
+                android:id="@+id/barcode_scanner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </com.journeyapps.barcodescanner.CompoundBarcodeView>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="50dp"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
+
             <EditText
                 android:id="@+id/CouponNumber"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@drawable/round_background_02"
                 android:hint="  쿠폰 번호를 입력해 주세요."
-                android:textSize="15dp"/>
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/UseButton"
-                android:layout_weight="4"
-                android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="4"
                 android:background="@drawable/my_button"
-                android:textColor="#FFFFFF"
-                android:text="확인"/>
-        </LinearLayout>
-    </LinearLayout>
+                android:text="확인"
+                android:textColor="#FFFFFF" />
 
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

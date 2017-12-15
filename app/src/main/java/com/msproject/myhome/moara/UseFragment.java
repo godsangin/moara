@@ -1,6 +1,7 @@
 package com.msproject.myhome.moara;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -20,13 +21,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -40,6 +52,9 @@ public class UseFragment extends Fragment {
     String barcodeString;
     char[] charUserName;
     String userName;
+
+    private CompoundBarcodeView barcodeView;
+
     public UseFragment() {
         // Required empty public constructor
     }
@@ -64,7 +79,8 @@ public class UseFragment extends Fragment {
         barcode = new char[36];
         charUserName=new char[23];
 
-
+        barcodeView = (CompoundBarcodeView) view.findViewById(R.id.barcode_scanner);
+        barcodeView.decodeContinuous(callback);
 
         useButton = (Button) view.findViewById(R.id.UseButton);
 
@@ -91,7 +107,6 @@ public class UseFragment extends Fragment {
                                         if(s.child("barcode").getValue().toString().equals(barcodeString)){
                                             usersRef.child(snapshot.getKey().toString() + "/giftitem/" + snap.getKey().toString() + "/" + s.getKey().toString()).removeValue();
                                             Toast.makeText(getActivity(),"사용완료",Toast.LENGTH_SHORT).show();
-                                            usersRef.child(snapshot.getKey().toString() + "/alarm/buy").setValue(true);
                                             //알림추가
 
 
@@ -113,6 +128,116 @@ public class UseFragment extends Fragment {
 
 
         return view;
+    }
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users/");
+
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if(result.getText() != null) {
+                final String barcode = result.getText();
+
+                ref.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        if(dataSnapshot.getKey().substring(5).equals(barcode.substring(13))) {
+                            DataSnapshot snapshot = dataSnapshot.child("giftitem").child(MainActivity.uid);
+                            boolean exist = false;
+                            GiftItem item = null;
+                            for(DataSnapshot ds : snapshot.getChildren()) {
+                                item = ds.getValue(GiftItem.class);
+                                exist = true;
+                                break;
+                            }
+
+                            if(exist) {
+                                onPause();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                final AlertDialog dialog = builder.create();
+
+                                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.product_detail, null);
+                                TextView name = (TextView) dialogView.findViewById(R.id.product_detail_name);
+                                TextView receiver = (TextView) dialogView.findViewById(R.id.product_detail_receiver);
+                                TextView until = (TextView) dialogView.findViewById(R.id.product_detail_until);
+                                ImageView imageView = (ImageView) dialogView.findViewById(R.id.product_detail_img);
+
+                                Button useButton = (Button) dialogView.findViewById(R.id.product_detail_use);
+                                useButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                    }
+                                });
+
+                                Button cancelButton = (Button) dialogView.findViewById(R.id.product_detail_cancel);
+                                cancelButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        onResume();
+                                        dialog.dismiss();
+                                    }
+                                });
+
+
+                                name.setText(item.getName());
+                                receiver.setText(item.getFrom());
+                                until.setText(item.getDate());
+
+                                FirebaseStorage storage = FirebaseStorage.getInstance();
+                                StorageReference ref = storage.getReference();
+
+                                StorageReference downloadRef = ref.child(item.getStoreUid()).child("product").child(item.getName() + ".jpg");
+                                Glide.with(getContext()).using(new FirebaseImageLoader()).load(downloadRef).into(imageView);
+
+                                dialog.setView(dialogView);
+                                dialog.show();
+
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+
+        }
+    };
+
+    @Override
+    public void onResume() {
+        barcodeView.resume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        barcodeView.pause();
+        super.onPause();
     }
 
     @Override
