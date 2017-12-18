@@ -42,6 +42,8 @@ public class SignupActivity extends AppCompatActivity {
 
     public String[] typeList = {"user", "store"};
     public String type = "";
+    //String[] emailList = {"@naver.com", "daum.net","gmail.com","직접입력"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkInput(user_id) && checkInput(user_password) && checkInput(user_name) && checkInput(user_tel)){
+                if(checkInput(user_id) && checkInput(user_password) && checkInput(user_name) && checkInput(user_tel) && checkEmail(user_id)){
                     final String id = user_id.getText().toString();
                     final String password = user_password.getText().toString();
                     final String name = user_name.getText().toString();
@@ -142,7 +144,7 @@ public class SignupActivity extends AppCompatActivity {
                     });
 
                 } else { // password incorrect
-                    Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -154,5 +156,17 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+    private boolean checkEmail(EditText editText){
+        String str = editText.getText().toString();
+        char[] email;
+        email = new char[30];
+        email = str.toCharArray();
+        for (int i=0; i<email.length;i++){
+            if(email[i]=='@')
+                return true;
+        }
+        Toast.makeText(getApplicationContext(), "ID를 email형식으로 갖춰주십시오.", Toast.LENGTH_SHORT).show();
+        return false;
     }
 }

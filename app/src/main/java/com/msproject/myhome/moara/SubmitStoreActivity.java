@@ -151,18 +151,20 @@ public class SubmitStoreActivity extends AppCompatActivity {
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SELECT_PICTURE) {
-            Bitmap bm = null;
-            try {
-                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+        if(resultCode==RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Bitmap bm = null;
+                try {
+                    bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imageView.setBackgroundColor(Color.parseColor("#000000"));
+                imageView.setImageBitmap(bm);
+                Uri selectedImageUri = data.getData();
+                getPath(selectedImageUri);
             }
-            imageView.setBackgroundColor(Color.parseColor("#000000"));
-            imageView.setImageBitmap(bm);
-            Uri selectedImageUri = data.getData();
-            getPath(selectedImageUri);
         }
     }
     public String getPath(Uri uri) {

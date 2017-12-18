@@ -73,10 +73,10 @@ public class ModifyItem extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                                Intent intent = new Intent();
-                                intent.setType("image/*");
-                                intent.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+                 Intent intent = new Intent();
+                 intent.setType("image/*");
+                 intent.setAction(Intent.ACTION_GET_CONTENT);
+                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
              }
          });
         submit.setOnClickListener(new View.OnClickListener() {
@@ -161,21 +161,24 @@ public class ModifyItem extends AppCompatActivity {
         });
     }
 
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                    if (requestCode == SELECT_PICTURE) {
-                            Bitmap bm = null;
-                            try {
-                                    bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+            if(resultCode==RESULT_OK) {
+                if (requestCode == SELECT_PICTURE) {
+                    Bitmap bm = null;
+                    try {
+                        bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                            imageView.setBackgroundColor(Color.parseColor("#000000"));
-                            imageView.setImageBitmap(bm);
-                            Uri selectedImageUri = data.getData();
-                            getPath(selectedImageUri);
-                        }
+                    imageView.setBackgroundColor(Color.parseColor("#000000"));
+                    imageView.setImageBitmap(bm);
+                    Uri selectedImageUri = data.getData();
+                    getPath(selectedImageUri);
+                }
+            }
     }
     public String getPath(Uri uri) {
                 // uri가 null일경우 null반환
@@ -194,6 +197,9 @@ public class ModifyItem extends AppCompatActivity {
                         return uri.getPath();
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        super.onBackPressed();
+    }
 }
