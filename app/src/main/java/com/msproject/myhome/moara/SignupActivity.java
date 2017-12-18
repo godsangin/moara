@@ -7,10 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +34,14 @@ public class SignupActivity extends AppCompatActivity {
     EditText user_password;
     EditText user_name;
     EditText user_tel;
-    EditText user_type;
+    Spinner user_type;
     Button button;
     FirebaseAuth mAuth;
     Context mContext;
     LayoutInflater mLayoutInflater;
+
+    public String[] typeList = {"user", "store"};
+    public String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +52,22 @@ public class SignupActivity extends AppCompatActivity {
         user_password = (EditText)findViewById(R.id.user_password);
         user_name = (EditText)findViewById(R.id.user_name);
         user_tel = (EditText)findViewById(R.id.user_tel);
-        user_type = (EditText)findViewById(R.id.user_type);
+        user_type = (Spinner) findViewById(R.id.user_type);
 
         mContext = this;
         mLayoutInflater = getLayoutInflater();
+
+        user_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                type = typeList[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         button = (Button)findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +78,7 @@ public class SignupActivity extends AppCompatActivity {
                     final String password = user_password.getText().toString();
                     final String name = user_name.getText().toString();
                     final String tel = user_tel.getText().toString();
-                    final String type = user_type.getText().toString();
+                    Log.d("type==", type);
 
                     mAuth = FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(id, password).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {

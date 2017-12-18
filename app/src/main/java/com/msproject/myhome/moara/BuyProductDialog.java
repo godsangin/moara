@@ -97,6 +97,8 @@ public class BuyProductDialog extends AppCompatActivity {
                             String uid_half = MainActivity.uid.substring(5);
                             long barcodeString = System.currentTimeMillis();
                             GiftItem giftItem = new GiftItem(product.getName(), product.getUntil(), myName, storeUid, String.valueOf(barcodeString) + uid_half);
+                            Alarm alarm = new Alarm(false, true, false);
+                            mConditionRef.child("alarm").setValue(alarm.toMap());
                             mConditionRef.child("giftitem/" + storeUid + "/" + product.getName()).setValue(giftItem.toMap());
                             dialog.dismiss();
                         }
@@ -156,10 +158,12 @@ public class BuyProductDialog extends AppCompatActivity {
 
                                         if(exist) {
                                             DatabaseReference alarm = database.getReference("users/" + key + "/alarm");
-                                            alarm.child("gift").setValue(true);
+                                            Alarm alarm1 = new Alarm(true, false, false);
+                                            alarm.setValue(alarm1);
+                                            String from = dataSnapshot.child(MainActivity.uid + "/name").getValue().toString();
                                             DatabaseReference giftRef = database.getReference("users/" + key + "/giftitem/" + storeUid + "/");
                                             String barcode = String.valueOf(System.currentTimeMillis()) + MainActivity.uid.substring(5);
-                                            giftRef.child(productName.getText().toString()).setValue(new GiftItem(product.getName(), product.getUntil(), fromName, storeUid, barcode));
+                                            giftRef.child(productName.getText().toString()).setValue(new GiftItem(product.getName(), product.getUntil(), from, storeUid, barcode));
 
                                             dialog.dismiss();
                                             Toast.makeText(context, "선물이 완료되었습니다.", Toast.LENGTH_LONG).show();

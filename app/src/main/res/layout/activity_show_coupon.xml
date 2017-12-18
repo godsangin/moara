@@ -7,35 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.msproject.myhome.moara.ShowCouponActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal">
-        <ImageView
-            android:src="@drawable/coupon_img_01"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="가게 이름"/>
-            <TextView
-                android:gravity="right"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="발급일 : 2013.07.28"/>
-            <TextView
-                android:gravity="right"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="0개"/>
-        </LinearLayout>
-    </LinearLayout>
     <ListView
         android:id="@+id/productList"
         android:layout_width="match_parent"

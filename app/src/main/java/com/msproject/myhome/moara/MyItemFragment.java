@@ -1,35 +1,22 @@
 package com.msproject.myhome.moara;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -40,6 +27,7 @@ public class MyItemFragment extends Fragment {
     GridView gift_item_list;
     GiftItemAdapter gift_item_adapter;
 
+    LinearLayout gift_item_no;
 
     class GiftItemAdapter extends BaseAdapter{
         ArrayList<GiftItem> items;
@@ -102,6 +90,9 @@ public class MyItemFragment extends Fragment {
 
         gift_item_list = (GridView) view.findViewById(R.id.myItemList);
         gift_item_adapter =  new GiftItemAdapter(inflater);
+
+        gift_item_no = (LinearLayout) view.findViewById(R.id.my_item_no);
+
         DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mConditionRef = mdatabase.child("/users/" + MainActivity.uid + "/giftitem/");
 
@@ -110,10 +101,15 @@ public class MyItemFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     for(DataSnapshot s: snapshot.getChildren()){
-                        Log.d("storeUid==", s.child("storeUid").getValue().toString());
-                        GiftItem item = s.getValue(GiftItem.class);
-                        gift_item_adapter.addItems(item);
-                        gift_item_list.setAdapter(gift_item_adapter);
+                        if(s.getValue() != null){
+                            gift_item_no.setVisibility(View.GONE);
+                            GiftItem item = s.getValue(GiftItem.class);
+                            gift_item_adapter.addItems(item);
+                            gift_item_list.setAdapter(gift_item_adapter);
+                        }
+                        else{
+                            gift_item_list.setVisibility(View.GONE);
+                        }
                     }
                 }
                 gift_item_adapter.notifyDataSetChanged();

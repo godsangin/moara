@@ -118,6 +118,8 @@ public class SaveFragment extends Fragment {
                                             int num = Integer.parseInt(oldVal);
                                             num = num + count;
                                             mDatabase.child("users/" + snapshot.getKey().toString() + "/stamps/" + MainActivity.uid + "/num").setValue(String.valueOf(num));
+                                            Alarm alarm = new Alarm(false, false, true);
+                                            mDatabase.child("users/" + snapshot.getKey().toString() + "/alarm").setValue(alarm.toMap());
                                         }
                                         else{
                                             Toast.makeText(getContext(), "매장을 등록하지 않은 고객입니다.", Toast.LENGTH_SHORT).show();

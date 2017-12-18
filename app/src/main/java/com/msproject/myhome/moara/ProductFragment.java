@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,7 +39,7 @@ public class ProductFragment extends Fragment {
     int REQUEST_CODE_MODIFY = 101;
     ListView productView;
     StoreProductAdapter adapter;
-    Button addButton;
+    FloatingActionButton addButton;
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -70,7 +71,7 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         productView = (ListView) view.findViewById(R.id.ProductStoreList);
-        addButton = (Button) view.findViewById(R.id.addProduct);
+        addButton = (FloatingActionButton) view.findViewById(R.id.addProduct);
         noProduct = (LinearLayout) view.findViewById(R.id.NoProduct);
 
         noProduct.setVisibility(View.VISIBLE);

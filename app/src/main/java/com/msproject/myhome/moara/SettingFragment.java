@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -59,14 +61,27 @@ public class SettingFragment extends Fragment {
                     case 1:
                         break;
                     case 2://알림설정
-                        Intent saintent= new Intent(getActivity(),SettingAlarmActivity.class);
-                        startActivityForResult(saintent,1);
+                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                        Alarm alarm = new Alarm(false, false, false);
+                        mDatabase.child("users/" + MainActivity.uid + "/alarm").setValue(alarm.toMap());
+                        Toast.makeText(getContext(),"Service 시작",Toast.LENGTH_SHORT).show();
+                        final CustomDialog customDialog = new CustomDialog();
+                        customDialog.getInstance(getContext(), getActivity().getLayoutInflater(), R.layout.submit_dialog);
+                        customDialog.show("회원가입이 완료되었습니다.", "확인");
+                        customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                customDialog.dismiss();
+                            }
+                        });
+                        Intent intent = new Intent(getActivity(), MyService.class);
+                        getActivity().startService(intent);
 
                         break;
                     case 3:
                         FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
+                        Intent mintent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(mintent);
                         getActivity().finish();
                     default:
                         return;
