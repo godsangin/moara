@@ -2,9 +2,12 @@ package com.msproject.myhome.moara;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,7 +41,7 @@ public class MyCouponFragment extends Fragment {
 
     static ListView couponView;
     static CouponAdapter adapter;
-    Button addButton;
+    FloatingActionButton addButton;
 
     LinearLayout noCoupon;
 
@@ -67,7 +70,8 @@ public class MyCouponFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         couponView = (ListView) view.findViewById(R.id.couponList);
-        addButton = (Button) view.findViewById(R.id.AddCoupon);
+        addButton = (FloatingActionButton) view.findViewById(R.id.AddCoupon);
+        addButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#78A0FF")));
         noCoupon = (LinearLayout) view.findViewById(R.id.NoCoupon);
 
         noCoupon.setVisibility(View.VISIBLE);

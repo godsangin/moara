@@ -18,11 +18,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,16 @@ public class MainFragment extends Fragment {
     HAdapter adapter;
     DatabaseReference mdatabase;
     AdapterViewFlipper avf;
+
+    ImageView imageView;
+    TextView name;
+    TextView stamp;
+
+    LinearLayout hasNoCoupon;
+    LinearLayout hasCoupon;
+
+    LinearLayout hasNoItem;
+    HorizontalListView item_list;
 
     public MainFragment() {
         // Required empty public constructor
@@ -58,6 +72,15 @@ public class MainFragment extends Fragment {
 
         TextView more_coupon = (TextView) view.findViewById(R.id.more_coupon);
         TextView more_item = (TextView) view.findViewById(R.id.more_item);
+
+        imageView = (ImageView) view.findViewById(R.id.main_coupon_image);
+        name = (TextView) view.findViewById(R.id.main_coupon_name);
+        stamp = (TextView) view.findViewById(R.id.main_coupon_stamp);
+
+        hasNoCoupon = (LinearLayout) view.findViewById(R.id.main_coupon_no);
+        hasCoupon = (LinearLayout) view.findViewById(R.id.main_coupon);
+
+        hasNoItem = (LinearLayout) view.findViewById(R.id.main_item_no);
 
         more_coupon.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -93,9 +116,41 @@ public class MainFragment extends Fragment {
 
 
         /* 디비에서 아이템 받아와서 메인 화면에 띄우는거 */
-        HorizontalListView item_list = (HorizontalListView) view.findViewById(R.id.item_list);
+        final HorizontalListView item_list = (HorizontalListView) view.findViewById(R.id.item_list);
 
         adapter = new HAdapter();
+
+        DatabaseReference mDataref = mdatabase.child("/users/" + MainActivity.uid + "/stamps");
+
+        mDataref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    if(snapshot.getValue() == null){
+                        hasCoupon.setVisibility(View.GONE);
+                        hasNoCoupon.setVisibility(View.VISIBLE);
+                    }else{
+                        hasNoCoupon.setVisibility(View.GONE);
+                        hasCoupon.setVisibility(View.VISIBLE);
+
+                        name.setText(snapshot.child("name").getValue().toString());
+                        stamp.setText(snapshot.child("num").getValue().toString());
+                        String ref = snapshot.child("storeUid").getValue().toString();
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+
+                        Glide.with(getContext()).using(new FirebaseImageLoader()).load(storageReference.child(ref)).into(imageView);
+                    }
+                    break;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         DatabaseReference mConditionRef_item = mdatabase.child("/users/" + MainActivity.uid + "/giftitem/");
 
@@ -104,10 +159,16 @@ public class MainFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int i = 0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    GiftItem giftItem = snapshot.getValue(GiftItem.class);
-                    adapter.addItems(new Item(giftItem.getName(),R.drawable.product_00));
-
+                    if(snapshot.getValue() != null){
+                        hasNoItem.setVisibility(View.GONE);
+                        GiftItem giftItem = snapshot.getValue(GiftItem.class);
+                        adapter.addItems(new Item(giftItem.getName(),R.drawable.product_00));
+                    }
+                    else{
+                        item_list.setVisibility(View.GONE);
+                    }
                 }
+
             }
 
             @Override

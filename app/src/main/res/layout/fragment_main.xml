@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.msproject.myhome.moara.MainFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.msproject.myhome.moara.MainFragment"
+    android:background="#EEEEEE">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -15,67 +17,188 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:gravity="center"
+            <LinearLayout
+                android:layout_margin="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="이벤트"/>
-
-            <AdapterViewFlipper
-                android:id="@+id/event_tab"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:flipInterval="3000">
-            </AdapterViewFlipper>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="225dp"
+                android:orientation="vertical"
+                android:background="#FFFFFFFF">
                 <TextView
                     android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="내 쿠폰"/>
-                <TextView
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/more_coupon"
-                    android:gravity="center"
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:text="더보기"/>
-            </RelativeLayout>
+                    android:layout_height="45dp"
+                    android:text="이벤트"
+                    android:background="@drawable/underline_layout"/>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/coupon_img_01"
-                android:scaleType="fitXY"/>
+                <AdapterViewFlipper
+                    android:id="@+id/event_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="175dp"
+                    android:flipInterval="3000">
+                </AdapterViewFlipper>
+            </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
+                android:layout_margin="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
-            <TextView
-                android:gravity="center"
-                android:text="내 아이템"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-            <TextView
-                android:layout_alignParentRight="true"
-                android:id="@+id/more_item"
-                android:gravity="center"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:text="더보기"/>
-            </RelativeLayout>
+                android:layout_height="230dp"
+                android:orientation="vertical"
+                android:background="#FFFFFF">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp">
+                    <TextView
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:text="내 쿠폰"
+                        android:background="@drawable/underline_layout"/>
+                    <TextView
+                        android:layout_marginRight="10dp"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/more_coupon"
+                        android:gravity="center"
+                        android:layout_width="40dp"
+                        android:layout_height="45dp"
+                        android:text="더보기"/>
+                </RelativeLayout>
 
-            <com.msproject.myhome.moara.HorizontalListView
-                android:id="@+id/item_list"
-                android:layout_width="fill_parent"
-                android:layout_height="130dp"
-                android:background="#FFFFFF"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"/>
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/main_coupon_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        app:srcCompat="@drawable/icon_sad"/>
+                    <TextView
+                        android:textAlignment="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="소유 중인 쿠폰이 없습니다."/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/main_coupon"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/round_main_coupon">
+                    <LinearLayout
+                        android:layout_marginLeft="12dp"
+                        android:layout_gravity="center"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/round_background">
+
+                        <ImageView
+                            android:id="@+id/main_coupon_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="15dp"
+
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/main_coupon_name"
+                            android:layout_marginTop="20dp"
+                            android:layout_gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textSize="20dp"
+                            android:textAlignment="center"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_marginRight="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="보유 스탬프 수 : "
+                                android:textSize="15dp"
+                                android:gravity="right|bottom"/>
+
+                            <TextView
+                                android:id="@+id/main_coupon_stamp"
+                                android:layout_marginRight="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="15dp"
+                                android:gravity="right|bottom"
+                                android:text="0 개"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="185dp"
+                android:background="#FFFFFFFF"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <TextView
+                        android:gravity="center"
+                        android:text="내 아이템"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/underline_layout"/>
+                    <TextView
+                        android:layout_marginRight="10dp"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/more_item"
+                        android:gravity="center"
+                        android:layout_width="40dp"
+                        android:layout_height="50dp"
+                        android:text="더보기"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/main_item_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:srcCompat="@drawable/icon_sad"/>
+                    <TextView
+                        android:textAlignment="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="선물함이 비어있습니다."/>
+                </LinearLayout>
+
+                <com.msproject.myhome.moara.HorizontalListView
+                    android:visibility="gone"
+                    android:id="@+id/item_list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="130dp"
+                    android:background="#FFFFFF"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="15dp"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

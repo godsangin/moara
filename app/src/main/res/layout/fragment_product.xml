@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/addProduct"
-        android:text="+"
         android:layout_gravity="bottom|right"
         android:layout_margin="10dp"
         android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/ic_add_black_24dp"/>
 
     <LinearLayout
         android:id="@+id/NoProduct"

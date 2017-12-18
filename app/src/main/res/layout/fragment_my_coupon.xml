@@ -17,13 +17,13 @@
             android:layout_height="wrap_content">
         </ListView>
     </LinearLayout>
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/AddCoupon"
-        android:text="+"
         android:layout_gravity="right|bottom"
         android:layout_margin="20dp"
         android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/ic_add_black_24dp"/>
 
     <LinearLayout
         android:id="@+id/NoCoupon"
