@@ -44,7 +44,7 @@ public class SettingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         listView=(ListView) view.findViewById(R.id.SettingList);
         adapter=new SettingAdapter();
-        adapter.addItem(new SettingItem(R.drawable.ic_home_black_24dp,"개인정보수정"));
+        adapter.addItem(new SettingItem(R.drawable.ic_home_black_24dp,"djq"));
         adapter.addItem(new SettingItem(R.drawable.ic_lightbulb_outline_black_24dp,"구매내역"));
         adapter.addItem(new SettingItem(R.drawable.ic_card_giftcard_black_24dp,"알림설정"));
         adapter.addItem(new SettingItem(R.drawable.ic_settings_black_24dp,"로그아웃"));
@@ -57,8 +57,10 @@ public class SettingFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0:
+                        Toast.makeText(getContext(),"업데이트 중입니다.\n다음버전에서 찾아뵙겠습니다.",Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
+                        Toast.makeText(getContext(),"업데이트 중입니다.\n다음버전에서 찾아뵙겠습니다.",Toast.LENGTH_SHORT).show();
                         break;
                     case 2://알림설정
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -67,7 +69,7 @@ public class SettingFragment extends Fragment {
                         Toast.makeText(getContext(),"Service 시작",Toast.LENGTH_SHORT).show();
                         final CustomDialog customDialog = new CustomDialog();
                         customDialog.getInstance(getContext(), getActivity().getLayoutInflater(), R.layout.submit_dialog);
-                        customDialog.show("회원가입이 완료되었습니다.", "확인");
+                        //customDialog.show("알", "확인");
                         customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
