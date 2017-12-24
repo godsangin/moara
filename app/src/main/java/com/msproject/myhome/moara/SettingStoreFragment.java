@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -76,8 +77,10 @@ public class SettingStoreFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 1:
+                        Toast.makeText(getContext(),"업데이트 중입니다.\n다음버전에서 찾아뵙겠습니다.",Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
+                        Toast.makeText(getContext(),"업데이트 중입니다.\n다음버전에서 찾아뵙겠습니다.",Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         FirebaseAuth.getInstance().signOut();
